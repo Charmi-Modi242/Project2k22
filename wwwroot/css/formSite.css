@@ -1,0 +1,245 @@
+﻿body {
+    background-image: url('/Images/photo3.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
+.home_content {
+    padding-top: 30px;
+}
+
+/*.container {
+    padding-top: 30px;
+}*/
+.main-flex {
+    display: flex;
+    flex-wrap: wrap;
+    /*max-width: 45%;*/
+    /*justify-content: center;*/
+    justify-content: space-between;
+}
+
+.mf1 {
+    /*order: 3;*/
+    /*width: 100%;*/
+    padding: 0 30px;
+    justify-content: center;
+}
+
+.card {
+    /*padding: 50px 50px;*/
+}
+
+.day-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/*.mf2 {
+    width: 50%;
+    flex-shrink: 2;
+    height: 100%;
+    align-self: center;
+}*/
+/*.mf2 .svgImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+}*/
+/*.svgImg {
+    max-width: 100%;
+    height: auto;
+}*/
+
+.name-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.name-fitem1 {
+    width: 50%;
+    padding-right:10px;
+}
+
+.name-fitem2 {
+    width: 50%;
+}
+
+.form-outline {
+    position: relative;
+}
+
+.form-label {
+    position: absolute;
+    top: 0.3rem;
+    left: 0.6rem;
+    padding-left: 0.3rem;
+    cursor: text;
+}
+
+#extra {
+    border: 1px solid #dbd5d5;
+    border-radius: 4px;
+    padding: 7px;
+    background: #fff;
+}
+
+#extralabel {
+    position: relative;
+    top: -1.2rem;
+    left: 0.25rem;
+    font-size: 12px;
+    background: white;
+}
+
+#custom:focus ~ .form-label,
+#custom:not(:placeholder-shown)#custom:not(:focus) ~ .form-label,
+#custom1:focus ~ .form-label,
+#custom1:not(:placeholder-shown)#custom1:not(:focus) ~ .form-label,
+#custom2:focus ~ .form-label,
+#custom2:not(:placeholder-shown)#custom2:not(:focus) ~ .form-label,
+#selectname:focus ~ .form-label,
+#selectname:not(:placeholder-shown)#selectname:not(:focus) ~ .form-label,
+.custom3:focus ~ .form-label,
+.custom3:not(:placeholder-shown).custom3:not(:focus) ~ .form-label {
+    top: -0.6rem;
+    left: 0.5rem;
+    font-size: 12px;
+    background: white;
+}
+
+input[type="file"] ~ .form-label {
+    top: -0.6rem;
+    left: 0.5rem;
+    font-size: 13px;
+    background: linear-gradient(white, #ececec);
+}
+
+#day {
+    /*border: 2px solid black;*/
+    border-radius: 150px;
+    font-size: 12px;
+    margin: 0 5px;
+}
+
+#gender {
+    border: 1px solid #dbd5d5;
+    border-radius: 4px;
+    padding: 5px
+}
+
+#lgender {
+    position: absolute;
+    top: 14.25rem;
+    left: 8.75rem;
+    font-size: 13px;
+    background: white;
+}
+
+span {
+    font-size: 14px;
+}
+/* tablet and ipad */
+@media (max-width: 912px) {
+    /*.home_content {
+        padding-left: 10px;
+    }*/
+    /*.main-flex {
+        justify-content: space-evenly;
+    }*/
+
+    .mf1 {
+        /*padding-top: 50px;*/
+        padding-right: 0;
+        padding-left: 20px;
+        padding-bottom: 0;
+    }
+    /*mf2 {
+        width: 100%;
+    }*/
+}
+
+@media (max-width: 768px) {
+
+    body {
+        background-image: none;
+        background: #e0f3fa;
+    }
+
+    /*.home_content {
+        padding-left: 50px;
+    }*/
+
+    .main-flex {
+        justify-content: space-evenly;
+    }
+
+    .mf1 {
+        /*padding-top: 50px;*/
+        padding: 0 15px;
+    }
+    /*mf2 {
+        width: 100%;
+    }*/
+}
+
+@media(max-width: 519px) {
+
+    #day {
+        margin: 0 2px;
+    }
+
+    .day-fitem {
+        padding-bottom: 5px;
+    }
+}
+
+@media (max-width: 280px) {
+
+    #day {
+        margin: 0 3px;
+    }
+
+    span {
+        font-size: 10px;
+    }
+
+    #custom:focus ~ .form-label,
+    #custom:not(:placeholder-shown)#custom:not(:focus) ~ .form-label,
+    #custom1:focus ~ .form-label,
+    #custom1:not(:placeholder-shown)#custom1:not(:focus) ~ .form-label,
+    #custom2:focus ~ .form-label,
+    #custom2:not(:placeholder-shown)#custom2:not(:focus) ~ .form-label,
+    #selectname:focus ~ .form-label,
+    #selectname:not(:placeholder-shown)#selectname:not(:focus) ~ .form-label, #extralabel {
+        font-size: 10px;
+    }
+
+    input[type="file"] {
+        font-size: 10px;
+    }
+
+    input[type="file"] ~ .form-label {
+        font-size: 10px;
+    }
+
+    input[type="date"] {
+        font-size: 10px;
+    }
+
+    .form-check-input {
+        font-size: 15px;
+    }
+
+    .form-check-input, #gen {
+        line-height: 10px;
+    }
+
+    label {
+        font-size: 10px;
+    }
+}

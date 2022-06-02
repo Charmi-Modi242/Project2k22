@@ -1,0 +1,160 @@
+﻿@model physioCard.Domain.Appointment
+@*
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link rel="stylesheet" href="~/css/formSite.css" asp-append-version="true" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#selectname').select2();
+    });
+</script>
+
+<div class="container">
+    @*<br />
+    <h1>Schedule Appointment</h1>
+    <hr /><br />*@
+    <div>
+        <div class="main-flex">
+            <div class="main-fitem mf1">
+                <div class="shadow-sm card p-3 mb-5 rounded">
+                    <form method="post" enctype="multipart/form-data" asp-for="FixAppointment">
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <select asp-for="patientID" class="form-control" id="selectname" asp-items="@ViewBag.PatientName" placeholder=" ">
+                                    <option value="" selected="selected" disabled="disabled">Select Patient Name</option>
+                                    @*<option value="1">XYZ</option>
+                                    <option value="2">ABC</option>*@
+                                </select>
+                                <label class="form-label">Patient Name</label>
+                            </div>
+                            <span asp-validation-for="patientID" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group" id="extra">
+                            <label class="px-2" id="extralabel">Appointment</label><br />
+                            <div class="form-group">
+                                <div class="form-outline">
+                                    <input type="date" asp-for="date_start" placeholder=" " class="form-control" id="custom2" />
+                                    <label class="form-label">From</label>
+                                </div>
+                                <span asp-validation-for="date_start" class="text-danger"></span>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <div class="form-outline">
+                                    <input type="date" asp-for="date_end" placeholder=" " class="form-control" id="custom1" onchange="return changedisable()" />
+                                    @*@Html.TextBox("date_end", new { @type = "date" })*@
+                                    <label class="form-label">To</label>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group" id="extra">
+                                <label class="px-2" id="extralabel">Days</label>
+                                <div class="day-flex">
+                                    <div class="day-fitem">
+                                        <input type="checkbox" class="btn-check" id="btn-check-6" value="Sunday" asp-for="days[6]" disabled="disabled">
+                                        <label class="btn btn-outline-dark" for="btn-check-6" id="day">S</label>
+                                    </div>
+                                    <div class="day-fitem">
+                                        <input type="checkbox" class="btn-check" id="btn-check-0" value="Monday" asp-for="days[0]" disabled="disabled">
+                                        <label class="btn btn-outline-dark" for="btn-check-0" id="day">M</label>
+                                    </div>
+                                    <div class="day-fitem">
+                                        <input type="checkbox" class="btn-check" id="btn-check-1" value="Tuesday" asp-for="days[1]" disabled="disabled">
+                                        <label class="btn btn-outline-dark" for="btn-check-1" id="day">T</label>
+                                    </div>
+                                    <div class="day-fitem">
+                                        <input type="checkbox" class="btn-check" id="btn-check-2" value="Wednesday" asp-for="days[2]" disabled="disabled">
+                                        <label class="btn btn-outline-dark" for="btn-check-2" id="day">W</label>
+                                    </div>
+                                    <div class="day-fitem">
+                                        <input type="checkbox" class="btn-check" id="btn-check-3" value="Thursday" asp-for="days[3]" disabled="disabled">
+                                        <label class="btn btn-outline-dark" for="btn-check-3" id="day">T</label>
+                                    </div>
+                                    <div class="day-fitem">
+                                        <input type="checkbox" class="btn-check" id="btn-check-4" value="Friday" asp-for="days[4]" disabled="disabled">
+                                        <label class="btn btn-outline-dark" for="btn-check-4" id="day">F</label>
+                                    </div>
+                                    <div class="day-fitem">
+                                        <input type="checkbox" class="btn-check" id="btn-check-5" value="Saturday" asp-for="days[5]" disabled="disabled">
+                                        <label class="btn btn-outline-dark" for="btn-check-5" id="day">S</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input type="time" asp-for="starttime" placeholder=" " class="form-control" id="custom" />
+                                <label class="form-label">Time</label>
+                            </div>
+                            <span asp-validation-for="starttime" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <select asp-for="sessiontime" type="time" class="form-control" id="custom" placeholder=" ">
+                                    <option value="" selected="selected" disabled="disabled">Select Session Duration</option>
+                                    <option value="00:30">30 Minutes</option>
+                                    <option value="00:45">45 Minutes</option>
+                                    <option value="01:00">1 Hour</option>
+                                    <option value="01:15">1 Hour 15 Minutes</option>
+                                    <option value="01:30">1 Hour 30 Minutes</option>
+                                    <option value="02:00">2 Hours</option>
+                                </select>
+                                <label class="form-label">Sessiom Duration</label>
+                            </div>
+                            <span asp-validation-for="sessiontime" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input type="number" asp-for="cost" placeholder=" " class="form-control" id="custom" />
+                                <label class="form-label">Cost Per Session</label>
+                            </div>
+                            <span asp-validation-for="cost" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <input type="submit" value="FIX" class="btn btn-primary" onclick="return defaultvalue();" />
+                            <a asp-action="FixAppointment" class="btn btn-outline-primary">Reset</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function changedisable() {
+        var date = document.getElementById("custom1").value;
+        if (date) {
+            for (var i = 0; i < 7; i++) {
+                var disabled = document.querySelector("#btn-check-" + i).disabled;
+                if (disabled) {
+                    document.querySelector("#btn-check-" + i).disabled = false;
+                }
+            }
+        }
+        else {
+            for (var i = 0; i < 7; i++) {
+                document.querySelector("#btn-check-" + i).disabled = true;
+            }
+        }
+
+    }
+
+    function defaultvalue() {
+        var date = document.getElementById("custom1").value;
+        var date2 = document.getElementById("custom2").value;
+        if (!date) {
+            document.getElementById("custom1").value = date2;
+        }
+    }
+</script>

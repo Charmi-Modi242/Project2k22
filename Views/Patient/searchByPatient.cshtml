@@ -1,0 +1,114 @@
+﻿@using physioCard.Domain
+@*
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="container p-3">
+    <div class="container">
+        <form method="post" asp-action="searchByPatient">
+            <div class="row">
+                <div class="col-8"></div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <div class="form-outline">
+                            @Html.TextBox("txtname","",new{@class="form-control", @placeholder="Enter Name"})
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input type="submit" value="Search" class="btn-dark form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="row">
+            <div class="col-8"></div>
+            <div class="col-3">
+                <span class="text-danger">@ViewBag.Error</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="container">
+            <table class="table table-striped">
+                <tr>
+                    <th hidden="hidden">ID</th>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Chief Complains</th>
+                    <th>Medical History</th>
+                    <th colspan="2"></th>
+                </tr>
+                @foreach (Patient item in Model)
+                {
+                    <tr>
+                        <td hidden="hidden">@item.patientID</td>
+                        <td align="center"><a href="~/@item.photo"><img src="~/@item.photo" style="border-radius : 50%; width: 70px; height: 70px;" /></a></td>
+                        <td>@item.fname @item.lname</td>
+                        <td>@item.age</td>
+                        @{
+                            string str = item.chief_complains;
+                            if (str.Contains(","))
+                            {
+                                String[] strList = str.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                                <td>
+                                    <dl>
+                                        @foreach (String s in strList)
+                                        {
+                                            <dd>@s</dd>
+                                        }
+                                    </dl>
+                                </td>
+
+                            }
+                            else
+                            {
+                                <td>@item.chief_complains</td>
+                            }
+
+                            string str1 = item.medical_History;
+                            if (str.Contains(","))
+                            {
+                                String[] strList1 = str1.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                                <td>
+                                    <dl>
+                                        @foreach (String s in strList1)
+                                        {
+                                            <dd>@s</dd>
+                                        }
+                                    </dl>
+                                </td>
+
+                            }
+                            else
+                            {
+                                <td>@item.medical_History</td>
+                            }
+                        }
+                        <td align="right"><a asp-controller="Patient" asp-action="editPatient" asp-route-id="@item.patientID" class="btn btn-outline-dark" title="Edit"><span class="material-icons">mode_edit</span></a></td>
+                        <td><a asp-controller="Patient" asp-action="showPatientdetails" asp-route-id="@item.patientID" class="btn btn-outline-dark" title="Details"><span class="material-icons">medical_information</span></a></td>
+                    </tr>
+
+                }
+            </table>
+        </div>
+    }
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <a asp-action="showPatient" asp-controller="Patient" class="btn btn-dark">Back To Patient List</a>
+            </div>
+        </div>
+    </div>
+</div>

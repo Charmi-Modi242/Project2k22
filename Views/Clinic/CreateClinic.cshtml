@@ -1,0 +1,118 @@
+﻿@model physioCard.Domain.Clinic
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    if ((bool)ViewData["Isclinic"])
+    {
+        Layout = "_Layout";
+    }
+
+    else
+    {
+        Layout = "_Layout1";
+    }
+}
+<link rel="stylesheet" href="~/css/formSite.css" asp-append-version="true" />
+<div class="container">
+    @*<h1>Add Clinic</h1>
+    <hr /><br />*@
+    <div>
+        <div class="main-flex">
+            <div class="main-fitem mf1">
+                <div class="shadow-sm card p-3 mb-5 rounded">
+                    <span class="text-warning" style="font-size: 120%;">Data manipulation is not allowed. Fill the form carefully</span><br />
+                    <form asp-action="CreateClinic" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input asp-for="name" id="custom" class="form-control" placeholder=" " />
+                                <label class="form-label">Name </label>
+                            </div>
+                            <span asp-validation-for="name" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <textarea asp-for="address" id="custom" class="form-control" placeholder=" " style="height: 100px;"></textarea>
+                                <label class="form-label">Address </label>
+                            </div>
+                            <span asp-validation-for="address" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input asp-for="contactno" id="custom" class="form-control" placeholder=" " />
+                                <label class="form-label">Contact No </label>
+                            </div>
+                            <span asp-validation-for="contactno" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input asp-for="GSTno" id="custom" class="form-control" placeholder=" " />
+                                <label class="form-label">GST no </label>
+                            </div>
+                            <span asp-validation-for="GSTno" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input asp-for="head_signature_img" type="file" id="SignImg" onchange="return chkImg()" accept="image/*" class="form-control" />
+                                <label class="form-label">Head Signature </label>
+                            </div>
+                            <span asp-validation-for="head_signature_img" id="errSignImg" class="text-danger"></span>
+                            <div id="prevSignImg"></div>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input asp-for="logo_img" type="file" id="LogoImg" onchange="return chkImg()" accept="image/*" class="form-control" />
+                                <label class="form-label">Clinic Logo </label>
+                            </div>
+                            <span asp-validation-for="logo_img" id="errLogoImg" class="text-danger"></span>
+                            <div id="prevLogoImg"></div>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <input type="submit" value="Add" class="btn btn-primary" />
+                            <a asp-action="AddDoctorClinic" class="btn btn-outline-primary">Back To Clinics List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="main-fitem mf2">
+                @*<img src="/svgs/clinic.svg" class="svgImg" />*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@*applying css on textboxes*@
+<style>
+    .form-outline {
+        position: relative;
+    }
+
+    .form-label {
+        position: absolute;
+        top: 0.3rem;
+        left: 0.6rem;
+        padding-left: 0.3rem;
+        cursor: text;
+    }
+
+    #custom:focus ~ .form-label,
+    #custom:not(:placeholder-shown)#custom:not(:focus) ~ .form-label {
+        top: -0.8rem;
+        left: 0.5rem;
+        font-size: 13px;
+        background: white;
+    }
+
+    input[type="file"] ~ .form-label {
+        top: -0.8rem;
+        left: 0.5rem;
+        font-size: 13px;
+        background: white;
+    }
+</style>

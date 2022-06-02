@@ -1,0 +1,266 @@
+﻿@using physioCard.Domain
+@model physioCard.Domain.Patient
+@*
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link rel="stylesheet" href="~/css/formSite.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/tableSite.css" asp-append-version="true" />
+<div class="container p-3">
+    <br />
+    <h1>Your Patients</h1>
+    <hr /><br />
+    <div class="container">
+        <form method="post" asp-action="searchbypatient">
+            <div class="row">
+                <div class="col-9"></div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <div class="form-outline">
+                            @*@Html.TextBox("txtname","",new{@class="form-control", @placeholder="Enter Name"})*@
+                            <input class="form-control mr-sm-2" id="myfilter" type="search" placeholder="Search" aria-label="Search" onkeyup="search()">
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-1">
+                <div class="form-group">
+                <div class="form-outline">
+                <input type="submit" value="Search" class="btn-dark form-control" />
+                </div>
+                </div>
+                </div>*@
+            </div>
+        </form>
+    </div>
+    <br />
+    <div class="container">
+        <table class="table table-hover" id="mytable">
+            <thead>
+                <tr class="bg-dark text-white">
+                    <th hidden="hidden">ID</th>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>E-mail</th>
+                    <th>Contact No</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Patient item in ViewBag.patients)
+                {
+                    <tr>
+                        <td hidden="hidden">@item.patientID</td>
+                        <td data-label="Photo" align="center"><a href="~/@item.photo"><img src="~/@item.photo" style="border-radius : 50%; width: 70px; height: 70px;" /></a></td>
+                        <td data-label="Name">@item.fname @item.lname</td>
+                        <td data-label="Age">@item.age</td>
+                        <td data-label="E-mail">@item.email</td>
+                        <td data-label="Contact No">@item.contactno</td>
+                        <td data-label="Operations"><a href="#" class="edit" data-bs-toggle="modal" data-bs-target="#editPatient" data-id="@item.patientID">Edit</a> |
+                            <a asp-controller="Patient" asp-action="showPatientdetails" asp-route-id="@item.patientID">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal" id="editPatient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Edit Patient</h4>
+            </div>
+            <form method="post" asp-action="editPatient">
+                <div class="modal-body">
+                    <input asp-for="patientID" id="pid" hidden="hidden" />
+                    <input asp-for="photo" id="logoLink" hidden="hidden" id="photo" />
+                    <div class="name-flex">
+                        <div class="name-fitem1">
+                            <div class="form-group">
+                                <div class="form-outline">
+                                    <input asp-for="fname" id="fname" class="form-control custom3" placeholder=" " />
+                                    <label class="form-label">First Name </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="name-fitem2">
+                            <div class="form-group">
+                                <div class="form-outline">
+                                    <input asp-for="lname" id="lname" class="form-control custom3" placeholder=" " />
+                                    <label class="form-label">Last Name </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="name-flex">
+                        <div class="name-fitem1">
+                            <span asp-validation-for="fname" class="text-danger"></span>
+                        </div>
+                        <div class="name-fitem2">
+                            <span asp-validation-for="lname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group" style="background: #fff;">
+                        <div class="form-outline" id="gender">
+                            <label class="px-2">Gender</label><br />
+                            <input asp-for="gender" id="female" class="form-check-input" type="radio" name="gender" value="Female" />&nbsp; Female <br />
+                            <input asp-for="gender" id="male" class="form-check-input" type="radio" name="gender" value="Male" />&nbsp; Male
+                        </div>
+                        <span asp-validation-for="gender" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input type="date" asp-for="dob" placeholder=" " class="form-control custom3" id="dob" />
+                            <label class="form-label">Date Of Birth</label>
+                        </div>
+                        <span asp-validation-for="dob" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <textarea asp-for="address" placeholder=" " class="form-control custom3" id="addr" style="height : 50px"></textarea>
+                            <label class="form-label">Address</label>
+                        </div>
+                        <span asp-validation-for="address" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input asp-for="email" id="email" class="form-control custom3" placeholder=" " />
+                            <label class="form-label">E-mail </label>
+                        </div>
+                        <span asp-validation-for="email" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input asp-for="contactno" id="contactno" class="form-control custom3" placeholder=" " />
+                            <label class="form-label">Contact No </label>
+                        </div>
+                        <span asp-validation-for="contactno" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <textarea asp-for="chief_complains" placeholder=" " class="form-control custom3" id="cc" style="height : 50px"></textarea>
+                            <label class="form-label">Chief Complains</label>
+                        </div>
+                        <span asp-validation-for="chief_complains" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <span class="text-warning">ENTER CHIEF COMPLAINS COMA( , ) SEPARATED</span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <textarea asp-for="medical_History" placeholder=" " class="form-control custom3" id="mh" style="height : 50px"></textarea>
+                            <label class="form-label">Medical History</label>
+                        </div>
+                        <span class="text-warning">ENTER CHIEF COMPLAINS COMA( , ) SEPARATED</span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input type="date" asp-for="registerdate" placeholder=" " class="form-control custom3" id="rd" />
+                            <label class="form-label">Registration Date</label>
+                        </div>
+                        <span asp-validation-for="registerdate" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input asp-for="photo_img" type="file" id="logo_img" onchange="return chkImg()" accept="image/*" class="form-control" />
+                            <label class="form-label">Profile Picture </label>
+                        </div>
+                        <span asp-validation-for="photo_img" id="errImg" class="text-danger">@ViewBag.error</span>
+                        <div id="prevImg"></div>
+                        <div id="showImg"><br /><img id="photo" width='150' /></div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <select asp-for="clinicid" class="form-control custom3" id="clinicId" asp-items=@ViewBag.docclinic>
+                                <option value="" disabled="disabled">Please select any clinic</option>
+                            </select>
+                            <label class="form-label">Clinic </label>
+                        </div>
+                        <span asp-validation-for="clinicid" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <input type="submit" value="Edit" class="btn btn-primary" />
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    const search = () => {
+        let filter = document.getElementById('myfilter').value.toUpperCase();
+        let table = document.getElementById('mytable');
+        let tr = table.getElementsByTagName('tr');
+
+        for (var i = 0; i < tr.length; i++) {
+            let td = tr[i].getElementsByTagName('td')[2];
+
+            if (td) {
+                let textvalue = td.textContent || td.innerHTML;
+                if (textvalue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                }
+                else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    $(document).ready(function() {
+        $('table .edit').on('click', function() {
+            var id = $(this).data("id");
+            $.ajax({
+                type: 'POST',
+                url: '/Patient/GetPatientByID/',
+                data: { "id": id },
+                success: function(response) {
+                    $("#photo").attr("src", "../../" + response.photo);
+                    $("#logoLink").attr("value", response.photo);
+                    $("#pid").attr("value", response.patientID);
+                    $("#fname").attr("value", response.fname);
+                    $("#lname").attr("value", response.lname);
+                    $("#email").attr("value", response.email);
+                    $("#contactno").attr("value", response.contactno);
+                    if (response.gender == "Female") {
+                        $("#female").attr("checked", "checked");
+                    } else {
+                        $("#male").attr("checked", "checked");
+                    }
+                    var tempdob = JSON.stringify(response.dob);
+                    document.getElementById("dob").value = tempdob.substring(1, 11);
+                    document.getElementById("addr").innerHTML = response.address;
+                    document.getElementById("cc").innerHTML = response.chief_complains;
+                    document.getElementById("mh").innerHTML = response.medical_History;
+                    var temprd = JSON.stringify(response.registerdate);
+                    document.getElementById("rd").value = temprd.substring(1, 11);
+                    document.getElementById("clinicId").value = response.clinicid;
+                    //$("#clinicid").val(response.clinicid);
+
+                }
+            })
+        });
+    });
+</script>
+<style>
+    span {
+        font-size: 13.5px;
+    }
+</style>

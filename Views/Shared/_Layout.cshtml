@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - physioCard</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Smooch&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/physioCard.styles.css" asp-append-version="true" />
+</head>
+<body>
+    @*<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">physioCard</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+    <ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="DashBoard" asp-action="DashBoard">DashBoard</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </li>
+    </ul>
+    </div>
+    @if (ViewBag.data[0] != null)
+    {
+    <div>
+    <ul class="nav nav-pills">
+    <li class="nav-item dropdown">
+    <a class="nav-link text-black" data-bs-toggle="dropdown" role="button" aria-expanded="false"><img src="~/@ViewBag.data[1]" style="border-radius: 50%" width="40" height="40" /> @ViewBag.data[2]</a>
+    <ul class="dropdown-menu">
+    <li><a class="dropdown-item" asp-area="" asp-controller="Doctor" asp-action="ViewProfile">View Profile</a></li>
+    <li><a class="dropdown-item" asp-area="" asp-controller="Doctor" asp-action="Logout">Log Out</a></li>
+    </ul>
+    </li>
+    </ul>
+    </div>
+    }
+    <div>&nbsp; &nbsp;</div>
+    </div>
+    </nav>
+    </header>*@
+    <div class="sidebar">
+        <header class="logo_content">
+            <div class="logo">
+                <i class='bx bxl-netlify'></i>
+                <div class="logo_name">PhysioCard</div>
+            </div>
+            <i class='bx bx-menu' id="btn"></i>
+        </header>
+        <ul class="nav_list">
+            <li>
+                <a asp-controller="DashBoard" asp-action="DashBoard">
+                    <i class='bx bx-home-alt-2'></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+                <span id="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a asp-controller="Patient" asp-action="addPatient">
+                    <i class='bx bx-user-plus'></i>
+                    <span class="links_name">Add Patient</span>
+                </a>
+                <span id="tooltip">Add Patient</span>
+            </li>
+            <li>
+                <a asp-controller="Patient" asp-action="showPatient">
+                    <i class='bx bxs-user-account'></i>
+                    <span class="links_name">Show Patient</span>
+                </a>
+                <span id="tooltip">Show Patient</span>
+            </li>
+            <li>
+                <a asp-controller="DashBoard" asp-action="DashBoard">
+                    <i class='bx bx-calendar'></i>
+                    <span class="links_name">Appointment Calendar</span>
+                </a>
+                <span id="tooltip">Appointment Calendar</span>
+            </li>
+            <li>
+                <a asp-controller="Appointment" asp-action="FixAppointment">
+                    <i class='bx bx-calendar-plus'></i>
+                    <span class="links_name">Schedule Appointment</span>
+                </a>
+                <span id="tooltip">Schedule Appointment</span>
+            </li>
+            <li>
+                <a asp-controller="Appointment" asp-action="showAppointment">
+                    <i class='bx bx-calendar-heart'></i>
+                    <span class="links_name">Show Appointment</span>
+                </a>
+                <span id="tooltip">Show Appointment</span>
+            </li>
+            <li>
+                <a asp-controller="DashBoard" asp-action="DashBoard">
+                    <i class='bx bxs-user-check'></i>
+                    <span class="links_name">Attendance</span>
+                </a>
+                <span id="tooltip">Attendance</span>
+            </li>
+            <li>
+                <a asp-controller="DashBoard" asp-action="DashBoard">
+                    <i class='bx bx-spreadsheet'></i>
+                    <span class="links_name">Generate Invoice</span>
+                </a>
+                <span id="tooltip">Generate Invoice</span>
+            </li>
+            <li>
+                <a asp-controller="DashBoard" asp-action="DashBoard">
+                    <i class='bx bx-check-square'></i>
+                    <span class="links_name">Payment Status</span>
+                </a>
+                <span id="tooltip">Payment Status</span>
+            </li>
+            <li>
+                <a asp-controller="Clinic" asp-action="AddDoctorClinic">
+                    <i class='bx bx-clinic'></i>
+                    <span class="links_name">Add Clinic</span>
+                </a>
+                <span id="tooltip">Add Clinic</span>
+            </li>
+            @*<li>
+            <a asp-controller="Doctor" asp-action="Changepassword">
+            <i class='bx bxs-key'></i>
+            <span class="links_name">Change Password</span>
+            </a>
+            <span id="tooltip">Change Password</span>
+            </li>*@
+        </ul>
+        <div class="profile_content">
+            <div class="profile">
+                <a class="profile_details" asp-controller="Doctor" asp-action="ViewProfile">
+                    <img src="~/@ViewBag.data[1]" />
+                    <div class="profile_name">
+                        <div class="name">Dr. @ViewBag.data[2]</div>
+                    </div>
+                </a>
+                <a asp-controller="Doctor" asp-action="Logout"><i class='bx bx-log-out-circle' title="Log Out" id="log_out"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="home_content">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @*<footer class="border-top footer text-muted">
+    <div class="container">
+    &copy; 2022 - physioCard - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+    </footer>*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/jquery-validate/jquery.validate.js"></script>
+    <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

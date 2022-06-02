@@ -1,0 +1,168 @@
+﻿@model physioCard.Domain.Doctor
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout1";
+}
+<link rel="stylesheet" href="~/css/loginSite.css" asp-append-version="true" />
+<div class="container">
+    <div class="wrapper">
+        <div class="shadow-sm card p-3 mb-5 rounded">
+            <div class="headline pb-3">
+                <h1>Sign Up</h1>
+            </div>
+            <form asp-action="SignUp" method="post" class="form" enctype="multipart/form-data">
+                <div class="signup">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group" style="padding-right: 0;">
+                                <input asp-for="fname" id="custom" class="form-control" placeholder=" " />
+                                <label class="form-label">First Name </label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group" style="padding-left: 0;">
+                                @*<div class="form-outline">*@
+                                <input asp-for="lname" id="custom" class="form-control" placeholder=" " />
+                                <label class="form-label" id="lname">Last Name </label>
+                                @*</div>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <span asp-validation-for="fname" class="text-danger"></span>
+                        </div>
+                        <div class="col-6">
+                            <span asp-validation-for="lname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        @*<div class="form-outline">*@
+                        <input asp-for="email" id="custom" class="form-control" placeholder=" " />
+                        <label class="form-label">E-mail </label>
+                        @*</div>*@
+                    </div>
+                    <div>
+                        <span asp-validation-for="email" class="text-danger"></span>
+                        @if (ViewBag.error != null)
+                        {
+                            <span class="text-danger">@ViewBag.error</span>
+                        }
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        @*<div class="form-outline">*@
+                        <input type="password" asp-for="password" onchange="return chkPwd()" id="custom" class="form-control pwd" placeholder=" " />
+                        <label class="form-label">Password </label>
+                        @*</div>*@
+                    </div>
+                    <div>
+                        <span asp-validation-for="password" id="errPwd" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        @*<div class="form-outline">*@
+                        <input type="password" asp-for="confirmPassword" id="custom" class="form-control" placeholder=" " />
+                        <label class="form-label">Confirm Password </label>
+                        @*</div>*@
+                    </div>
+                    <div>
+                        <span asp-validation-for="confirmPassword" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        @*<div class="form-outline">*@
+                        <input asp-for="contactno" id="custom" class="form-control" placeholder=" " />
+                        <label class="form-label">Contact No </label>
+                        @*</div>*@
+                    </div>
+                    <div>
+                        <span asp-validation-for="contactno" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        @*<div class="form-outline">*@
+                        <input asp-for="photo_img" type="file" id="formFile" onchange="return chkImg()" id="custom" accept="image/*" class="form-control" />
+                        <label class="form-label">Profile Picture </label>
+                        @*</div>*@
+                    </div>
+                    <div>
+                        <span asp-validation-for="photo_img" id="errImg" class="text-danger"></span>
+                        @if (ViewBag.errPhoto != "null")
+                        {
+                            <span class="text-danger">@ViewBag.errPhoto</span>
+                        }
+                        <div id="prevImg"></div>
+                    </div>
+                    <br />
+                    <div>
+                        <input type="submit" value="Sign Up" id="btn" class="btn btn-primary" />
+                        <div class="account-exist">
+                            Already Have An Account? <a asp-action="Login">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@*client side validation on image and password*@
+<script>
+
+    //file must be of Image type only
+    function chkImg() {
+        var theFile = document.getElementById('formFile');
+        var filePath = theFile.value;
+        var fileExt = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!fileExt.exec(filePath)) {
+            document.getElementById('errImg').innerHTML = "INCLUDE ONLY IMAGE FILE(i.e., .png, .jpg, .jpeg)";
+            document.getElementById('errImg').style.color = "#FF0000";
+            theFile.value = '';
+            return false;
+        }
+        else {
+            if (theFile.files && theFile.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('prevImg').innerHTML = "<br/><img src='" + e.target.result + "' width='150' />";
+                };
+                reader.readAsDataURL(theFile.files[0]);
+            }
+        }
+    }
+
+    // password must be strong enough
+    function chkPwd() {
+        var pass = document.querySelector(".pwd");
+        var val = pass.value;
+        document.getElementById("errPwd").style.color = "#FF0000";
+        var error = document.getElementById("errPwd");
+        if (!val.match("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])") || val.length != 8) {
+            error.innerHTML = "RULES FOR PASSWORD: ";
+            if (!val.match("^(?=.*[A-Z])")) {
+                error.innerHTML += "ONE UPPER-CASE CHARACTER, ";
+            }
+            if (!val.match("^(?=.*[a-z])")) {
+                error.innerHTML += "ONE LOWER-CASE CHARACTER, ";
+            }
+            if (!val.match("^(?=.*[0-9])")) {
+                error.innerHTML += "ONE NUMBER, ";
+            }
+            if (!val.match("^(?=.*[^a-zA-Z0-9])")) {
+                error.innerHTML += "ONE SPECIAL CHARACTER, ";
+            }
+            if (val.length != 8) {
+                error.innerHTML += "LENGTH MUST BE 8";
+            }
+            //pass.value = '';
+            return false;
+        }
+        else {
+            error.innerHTML = '';
+            return true;
+        }
+    }
+</script>

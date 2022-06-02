@@ -1,0 +1,61 @@
+﻿@model physioCard.Domain.Login
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout1";
+}
+<link rel="stylesheet" href="~/css/loginSite.css" asp-append-version="true" />
+<div class="container">
+    <div class="wrapper">
+        <div class="shadow-sm card p-3 mb-5 rounded">
+            <div class="headline">
+                <h1>Login</h1>
+            </div>
+            <div class="error">
+                @{
+                    if (ViewBag.did == 0)
+                    {
+                        <div class="text-danger">USERNAME OR PASSWORD OR BOTH INVALID</div>
+                        <div class="text-danger">NOTE: PASSWORD IS CASE-SENSITIVE</div>
+                        <br />
+                    }
+                }
+            </div>
+            <form method="post" class="form" asp-action="Login">
+                <div class="login">
+                    <div class="form-group">
+                        <input asp-for="email" class="form-control" placeholder=" " />
+                        <label asp-for="email" class="form-label">E-mail </label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="email" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <input asp-for="password" type="password" class="form-control" placeholder=" " />
+                        <label asp-for="password" class="form-label">Password </label>
+                    </div>
+                    <div>
+                        <span asp-validation-for="password" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="forget-password">
+                        <div class="check-box">
+                            <input asp-for="rememberMe" type="checkbox" id="checkbox" placeholder=" " />
+                            <label asp-for="rememberMe" for="checkbox" class="lblcheckbox" >Remember Me</label>
+                        </div>
+                        <a asp-action="sendOTP">Forgot Password?</a>
+                    </div>
+                    <div>
+                        <input type="submit" value="LOG IN" class="btn btn-primary" />
+                    </div>
+                    <div class="account-exist">
+                        Create A New Account? <a asp-action="SignUp">Sign Up</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        @*<hr />*@
+    </div>
+</div>

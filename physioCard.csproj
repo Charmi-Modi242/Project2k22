@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="wwwroot\lib\Securities\CustomSecurity.cs" />
+	<Compile Include="wwwroot\lib\Mail\sendmail.cs" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <Content Include="Securities\CustomSecurity.cs" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.2.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Clinic\head_signature\" />
+    <Folder Include="wwwroot\Clinic\logo\" />
+    <Folder Include="wwwroot\patient\photo\" />
+  </ItemGroup>
+
+</Project>

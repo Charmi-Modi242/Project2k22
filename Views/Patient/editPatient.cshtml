@@ -1,0 +1,218 @@
+﻿@model physioCard.Domain.Patient
+@*
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link rel="stylesheet" href="~/css/formSite.css" asp-append-version="true" />
+<div class="container">
+    @*<h1>Edit Patient</h1>
+    <hr /><br />*@
+
+    <div>
+        <div class="main-flex">
+            <div class="main-fitem mf1">
+                <div class="shadow-sm card p-3 mb-5 rounded">
+                    <form class="form" method="post" enctype="multipart/form-data" asp-for="addPatient">
+                        <input asp-for="patientID" hidden="hidden" />
+                        <input asp-for="photo" hidden="hidden" id="photo" />
+                        <div class="name-flex">
+                            <div class="name-fitem1">
+                                <div class="form-group">
+                                    <div class="form-outline">
+                                        <input asp-for="fname" id="custom" class="form-control" placeholder=" " />
+                                        <label class="form-label">First Name </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="name-fitem2">
+                                <div class="form-group">
+                                    <div class="form-outline">
+                                        <input asp-for="lname" id="custom" class="form-control" placeholder=" " />
+                                        <label class="form-label">Last Name </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="name-flex">
+                            <div class="name-fitem1">
+                                <span asp-validation-for="fname" class="text-danger"></span>
+                            </div>
+                            <div class="name-fitem2">
+                                <span asp-validation-for="lname" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group" style="background: #fff;">
+                            <div class="form-outline" id="gender">
+                                <label class="px-2">Gender</label><br />
+                                <input asp-for="gender" class="form-check-input" type="radio" name="gender" value="Female" />&nbsp; Female <br />
+                                <input asp-for="gender" class="form-check-input" type="radio" name="gender" value="Male" />&nbsp; Male
+                            </div>
+                            <span asp-validation-for="gender" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input type="date" asp-for="dob" placeholder=" " class="form-control" id="custom" />
+                                <label class="form-label">Date Of Birth</label>
+                            </div>
+                            <span asp-validation-for="dob" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <textarea asp-for="address" placeholder=" " class="form-control" id="custom" style="height : 50px"></textarea>
+                                <label class="form-label">Address</label>
+                            </div>
+                            <span asp-validation-for="address" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input asp-for="email" id="custom" class="form-control" placeholder=" " />
+                                <label class="form-label">E-mail </label>
+                            </div>
+                            <span asp-validation-for="email" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input asp-for="contactno" id="custom" class="form-control" placeholder=" " />
+                                <label class="form-label">Contact No </label>
+                            </div>
+                            <span asp-validation-for="contactno" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <textarea asp-for="chief_complains" placeholder=" " class="form-control" id="custom" style="height : 50px"></textarea>
+                                <label class="form-label">Chief Complains</label>
+                            </div>
+                            <span asp-validation-for="chief_complains" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <span class="text-warning">ENTER CHIEF COMPLAINS COMA( , ) SEPARATED</span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <textarea asp-for="medical_History" placeholder=" " class="form-control" id="custom" style="height : 50px"></textarea>
+                                <label class="form-label">Medical History</label>
+                            </div>
+                            <span class="text-warning">ENTER CHIEF COMPLAINS COMA( , ) SEPARATED</span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input type="date" asp-for="registerdate" placeholder=" " class="form-control" id="custom" />
+                                <label class="form-label">Registration Date</label>
+                            </div>
+                            <span asp-validation-for="registerdate" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input asp-for="photo_img" type="file" id="formFile" onchange="return chkImg()" accept="image/*" class="form-control" />
+                                <label class="form-label">Profile Picture </label>
+                            </div>
+                            <span asp-validation-for="photo_img" id="errImg" class="text-danger">@ViewBag.error</span>
+                            <div id="prevImg"></div>
+                            <div id="showImg"><br /><img src="~/@Model.photo" width='150' /></div>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <select asp-for="clinicid" class="form-control" id="custom" asp-items=@ViewBag.docclinic>
+                                    <option value="" selected="selected" disabled="disabled">Please select any clinic</option>
+                                </select>
+                                <label class="form-label">Clinic </label>
+                            </div>
+                            <span asp-validation-for="clinicid" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <input type="submit" value="Edit" class="btn btn-primary" />
+                            <a asp-action="showPatient" class="btn btn-outline-primary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="main-fitem mf2">
+                @*<img src="/svgs/patient.svg" class="svgImg" />*@
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .form-outline {
+        position: relative;
+    }
+
+    .form-label {
+        position: absolute;
+        top: 0.3rem;
+        left: 0.6rem;
+        padding-left: 0.3rem;
+        cursor: text;
+    }
+
+    #custom:focus ~ .form-label,
+    #custom:not(:placeholder-shown)#custom:not(:focus) ~ .form-label {
+        top: -0.8rem;
+        left: 0.5rem;
+        font-size: 13px;
+        background: white;
+    }
+
+    input[type="file"] ~ .form-label {
+        top: -0.8rem;
+        left: 0.5rem;
+        font-size: 13px;
+        background: white;
+    }
+
+
+
+    #gender {
+        border: 1px solid #dbd5d5;
+        border-radius: 4px;
+        padding: 5px
+    }
+
+    #lgender {
+        position: absolute;
+        top: 14.25rem;
+        left: 8.75rem;
+        font-size: 13px;
+        background: white;
+    }
+
+    span {
+        font-size: 14px;
+    }
+</style>
+<script>
+    //file must be of Image type only
+    function chkImg() {
+        var theFile = document.getElementById('formFile');
+        var filePath = theFile.value;
+        var fileExt = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!fileExt.exec(filePath)) {
+            document.getElementById('errImg').innerHTML = "INCLUDE ONLY IMAGE FILE(i.e., .png, .jpg, .jpeg)";
+            document.getElementById('errImg').style.color = "#FF0000";
+            theFile.value = '';
+            return false;
+        }
+        else {
+            if (theFile.files && theFile.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('prevImg').innerHTML = "<br/><img src='" + e.target.result + "' width='150' />";
+                    document.getElementById('showImg').innerHTML = "";
+                };
+                reader.readAsDataURL(theFile.files[0]);
+            }
+        }
+    }
+</script>

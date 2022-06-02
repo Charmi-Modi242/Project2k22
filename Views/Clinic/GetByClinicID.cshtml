@@ -1,0 +1,64 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Clinic Info";
+}
+<div class="container">
+    <h1>Clinic</h1>
+    <hr /><br />
+    
+    <div>
+        <div class="shadow-sm card p-3 mb-5 rounded">
+            <br/>
+            <div class="ps-4">
+                <div class="row">
+                    <div class="col-2">
+                        <a href="../../@Model.logo">
+                            <img src="../../@Model.logo" style="border-radius : 50%; border: 1px solid #ddd; padding: 5px; width: 200px; height: 200px;" @*class="img-fluid"*@ />
+                        </a>
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col-8">
+                        <h1>@Model.name</h1>
+                        <dl>
+                            <dt>Address</dt>
+                            <dd>@Model.address</dd>
+                            <dt>Contact No.</dt>
+                            <dd>@Model.contactno</dd>
+                            <dt>GST No.</dt>
+                            <dd>@Model.GSTno</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="ps-4">
+                <a asp-controller="Clinic" asp-action="RemoveClinic" asp-route-id="@Model.clinicID" class="btn btn-danger">Delete</a>
+                <a asp-controller="Doctor" asp-action="ViewProfile" class="btn btn-dark">Back To Profile</a>
+            </div>
+        </div>
+    </div>
+    <style>
+        a.mylink:hover::after {
+            background: url(https://fonts.gstatic.com/s/i/materialicons/delete/v17/20px.svg);
+            background-size: 20px 20px;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            content: "";
+        }
+    </style>
+    @*<script>
+        $(document).ready(function(){
+        $('.mylink').mouseover(function() {
+        myvar = this.id;
+        $('#myIcon '+myvar).show();
+        });
+        });
+        </script>*@

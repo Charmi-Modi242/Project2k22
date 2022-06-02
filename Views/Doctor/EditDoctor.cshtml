@@ -1,0 +1,143 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model physioCard.Domain.Doctor
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link rel="stylesheet" href="~/css/formSite.css" asp-append-version="true" />
+<div class="container">
+    @*<h1>Update Personal Info</h1>
+    <hr /><br/>*@
+
+    <div>
+        <div class="main-flex">
+            <div class="main-fitem mf1">
+                <form asp-action="EditDoctor" method="post" enctype="multipart/form-data">
+                    <div class="name-flex">
+                        <div class="name-fitem1">
+                            <div class="form-group">
+                                <div class="form-outline">
+                                    <input asp-for="fname" id="custom" class="form-control" placeholder=" " value="@Model.fname" />
+                                    <label class="form-label">First Name </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="name-fitem2">
+                            <div class="form-group">
+                                <div class="form-outline">
+                                    <input asp-for="lname" id="custom" class="form-control" placeholder=" " value="@Model.lname" />
+                                    <label class="form-label">Last Name </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="name-flex">
+                        <div class="name-fitem1">
+                            <span asp-validation-for="fname" class="text-danger"></span>
+                        </div>
+                        <div class="name-fitem2">
+                            <span asp-validation-for="lname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input asp-for="email" id="custom" class="form-control" placeholder=" " value="@Model.email" />
+                            <label class="form-label">E-mail </label>
+                        </div>
+                        <span asp-validation-for="email" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <input type="hidden" asp-for="password" value="Abc@1234" />
+                    <input type="hidden" asp-for="confirmPassword" value="Abc@1234" />
+                    <input type="hidden" asp-for="photo" value="@Model.photo" />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input asp-for="contactno" id="custom" class="form-control" placeholder=" " value="@Model.contactno" />
+                            <label class="form-label">Contact No </label>
+                        </div>
+                        <span asp-validation-for="contactno" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input asp-for="photo_img" type="file" id="formFile" onchange="return chkImg()" accept="image/*" class="form-control" />
+                            <label class="form-label">Profile Picture </label>
+                        </div>
+                        <span asp-validation-for="photo_img" id="errImg" class="text-danger"></span><br />
+                        <div id="prevImg"><img src="../@Model.photo" width="150" /></div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <input type="submit" value="Update" class="btn btn-primary" />
+                        <a asp-action="ViewProfile" class="btn btn-outline-primary">Back To Profile</a>
+                    </div>
+                </form>
+            </div>
+            <div class="main-fitem mf2">
+                <img src="/svgs/patient.svg" class="svgImg" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@*applying css on textboxes*@
+<style>
+    .form-outline {
+        position: relative;
+    }
+
+    .form-label {
+        position: absolute;
+        top: 0.3rem;
+        left: 0.6rem;
+        padding-left: 0.3rem;
+        cursor: text;
+    }
+
+    #custom:focus ~ .form-label,
+    #custom:not(:placeholder-shown)#custom:not(:focus) ~ .form-label {
+        top: -0.8rem;
+        left: 0.5rem;
+        font-size: 13px;
+        background: white;
+    }
+
+    input[type="file"] ~ .form-label {
+        top: -0.8rem;
+        left: 0.5rem;
+        font-size: 13px;
+        background: white;
+    }
+</style>
+
+@*client side validation on image and password*@
+<script>
+
+    //file must be of Image type only
+    function chkImg() {
+        var theFile = document.getElementById('formFile');
+        var filePath = theFile.value;
+        var fileExt = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!fileExt.exec(filePath)) {
+            document.getElementById('errImg').innerHTML = "INCLUDE ONLY IMAGE FILE(i.e., .png, .jpg, .jpeg)";
+            document.getElementById('errImg').style.color = "#FF0000";
+            theFile.value = '';
+            return false;
+        }
+        else {
+            if (theFile.files && theFile.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('prevImg').innerHTML = "<img src='" + e.target.result + "' width='150' />";
+                };
+                reader.readAsDataURL(theFile.files[0]);
+            }
+        }
+    }
+</script>
