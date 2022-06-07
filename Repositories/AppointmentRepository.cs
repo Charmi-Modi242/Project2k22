@@ -70,9 +70,12 @@ namespace physioCard.Repositories
         {
             try
             {
-                string sql = "select a.appointmentID, a.patientID, a.doctorID, a.date_start, a.starttime, a.sessiontime, p.fname, p.lname, c.name from appointmentTB a, patientTB p, clinicTB c where a.patientID=p.patientID and p.clinicID=c.clinicID and a.doctorID=@did order by a.date_start";
+                DateTime date = DateTime.Now;
+                string datestr = date.ToString("dd-MM-yyyy");
+                string sql = "select a.appointmentID, a.patientID, a.doctorID, a.date_start, a.starttime, a.sessiontime, p.fname, p.lname, c.name from appointmentTB a, patientTB p, clinicTB c where a.patientID=p.patientID and p.clinicID=c.clinicID and a.doctorID=@did and a.date_start>=@date order by a.date_start, a.starttime";
                 var param = new DynamicParameters();
                 param.Add("did", did, DbType.Int32);
+                param.Add("date", datestr, DbType.Date);
                 using (var connection = CreateConnection())
                 {
                     return (await connection.QueryAsync<Appointment>(sql, param)).ToList();
@@ -156,6 +159,149 @@ namespace physioCard.Repositories
             {
                 return false;
                 //throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> checkAppointmentClashesAsync(Appointment appointment)
+        {
+            try
+            {
+                List<Appointment> appointments = new List<Appointment>();
+                string sql = "select * from appointmentTB where date_start=@date and doctorID=@did;";
+                var param = new DynamicParameters();
+                param.Add("date", appointment.date_start, DbType.Date);
+                param.Add("did", appointment.doctorID, DbType.Int32);
+                using (var connection = CreateConnection())
+                {
+                    appointments = (await connection.QueryAsync<Appointment>(sql, param)).ToList();
+                }
+                if (appointments.Count == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    int count = 0;
+                    appointment.endtime = appointment.starttime.Add(appointment.sessiontime.TimeOfDay);
+                    //String astemp = appointment.starttime.ToString("HH-mm");
+                    //String aetemp = appointment.endtime.ToString("HH-mm");
+                    TimeSpan astime = appointment.starttime.TimeOfDay;
+                    TimeSpan aetime = appointment.endtime.TimeOfDay;
+                    int asminutes = (int)astime.TotalMinutes;
+                    int aeminutes = (int)aetime.TotalMinutes;
+                    foreach (var item in appointments)
+                    {
+                        item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
+                        //String istemp = item.starttime.ToString("HH-mm");
+                        //String ietemp = item.endtime.ToString("HH-mm");
+                        TimeSpan istime = item.starttime.TimeOfDay;
+                        TimeSpan ietime = item.endtime.TimeOfDay;
+                        int isminutes = (int)istime.TotalMinutes;
+                        int ieminutes = (int)ietime.TotalMinutes;
+
+                        ////if (astemp.CompareTo(istemp) == 0 || (astemp.CompareTo(istemp) > 0 && aetemp.CompareTo(ietemp) < 0) || (aetemp.CompareTo(istemp) > 0 && aetemp.CompareTo(ietemp) < 0) || (astemp.CompareTo(istemp) > 0 && astemp.CompareTo(ietemp) < 0))
+                        ////{
+                        //// count++;
+                        ////}
+                        //if((istemp.CompareTo(astemp) == 0) || (ietemp.CompareTo(aetemp) == 0) || ((istemp.CompareTo(astemp) > 0 && istemp.CompareTo(aetemp) < 0) && (ietemp.CompareTo(astemp) > 0 && ietemp.CompareTo(aetemp) < 0)) || ((istemp.CompareTo(astemp) < 0 && istemp.CompareTo(aetemp) < 0) && (ietemp.CompareTo(astemp) > 0 && ietemp.CompareTo(aetemp) > 0)) || ((istemp.CompareTo(astemp) < 0 && istemp.CompareTo(aetemp) < 0) && (ietemp.CompareTo(astemp) < 0 && ietemp.CompareTo(aetemp) < 0)) || ((istemp.CompareTo(astemp)>0 && istemp.CompareTo(aetemp) < 0) && (ietemp.CompareTo(astemp) > 0 && ietemp.CompareTo(aetemp) > 0)))
+                        //{
+                        // count++;
+                        //}
+
+                        for (int i = asminutes; i < aeminutes; i++)
+                        {
+                            for (int j = isminutes; j <= ieminutes; j++)
+                            {
+                                if (i == j)
+                                {
+                                    count++;
+                                    break;
+                                    ;
+                                }
+                            }
+                            if (count > 0)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    if (count > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Appointment>> getClashedAppointmentsAsync(Appointment appointment)
+        {
+            try
+            {
+                List<Appointment> appointments = new List<Appointment>();
+                List<Appointment> clashappointments = new List<Appointment>();
+                string sql = "select a.appointmentID, a.patientID, a.doctorID, a.date_start, a.starttime, a.sessiontime, p.fname, p.lname, c.name from appointmentTB a, patientTB p, clinicTB c where a.patientID=p.patientID and p.clinicID=c.clinicID and a.doctorID=@did and a.date_start=@date";
+                var param = new DynamicParameters();
+                param.Add("date", appointment.date_start, DbType.Date);
+                param.Add("did", appointment.doctorID, DbType.Int32);
+                using (var connection = CreateConnection())
+                {
+                    appointments = (await connection.QueryAsync<Appointment>(sql, param)).ToList();
+                }
+                appointment.endtime = appointment.starttime.Add(appointment.sessiontime.TimeOfDay);
+                //String astemp = appointment.starttime.ToString("HH-mm");
+                //String aetemp = appointment.endtime.ToString("HH-mm");
+                TimeSpan astime = appointment.starttime.TimeOfDay;
+                TimeSpan aetime = appointment.endtime.TimeOfDay;
+                int asminutes = (int)astime.TotalMinutes;
+                int aeminutes = (int)aetime.TotalMinutes;
+                foreach (var item in appointments)
+                {
+                    item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
+                    //String istemp = item.starttime.ToString("HH-mm");
+                    //String ietemp = item.endtime.ToString("HH-mm");
+                    TimeSpan istime = item.starttime.TimeOfDay;
+                    TimeSpan ietime = item.endtime.TimeOfDay;
+                    int isminutes = (int)istime.TotalMinutes;
+                    int ieminutes = (int)ietime.TotalMinutes;
+                    ////if (astemp.CompareTo(istemp) == 0 || (astemp.CompareTo(istemp) > 0 && aetemp.CompareTo(ietemp) < 0) || (aetemp.CompareTo(istemp) > 0 && aetemp.CompareTo(ietemp) < 0) || (astemp.CompareTo(istemp) > 0 && astemp.CompareTo(ietemp) < 0))
+                    ////{
+                    //// count++;
+                    ////}
+                    //if((istemp.CompareTo(astemp) == 0) || (ietemp.CompareTo(aetemp) == 0) || ((istemp.CompareTo(astemp) > 0 && istemp.CompareTo(aetemp) < 0) && (ietemp.CompareTo(astemp) > 0 && ietemp.CompareTo(aetemp) < 0)) || ((istemp.CompareTo(astemp) < 0 && istemp.CompareTo(aetemp) < 0) && (ietemp.CompareTo(astemp) > 0 && ietemp.CompareTo(aetemp) > 0)) || ((istemp.CompareTo(astemp) < 0 && istemp.CompareTo(aetemp) < 0) && (ietemp.CompareTo(astemp) < 0 && ietemp.CompareTo(aetemp) < 0)) || ((istemp.CompareTo(astemp)>0 && istemp.CompareTo(aetemp) < 0) && (ietemp.CompareTo(astemp) > 0 && ietemp.CompareTo(aetemp) > 0)))
+                    //{
+                    // count++;
+                    //}
+                    int count = 0;
+                    for (int i = asminutes; i < aeminutes; i++)
+                    {
+                        for (int j = isminutes; j <= ieminutes; j++)
+                        {
+                            if (i == j)
+                            {
+                                count++;
+                                break;
+                            }
+                        }
+                        if (count > 0)
+                        {
+                            break;
+                        }
+                    }
+                    if (count > 0)
+                    {
+                        clashappointments.Add(item);
+                    }
+                }
+                return clashappointments;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }

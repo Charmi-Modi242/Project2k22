@@ -1,0 +1,326 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+
+label {
+    color: gray;
+}
+
+.name-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.name-fitem1 {
+    width: 50%;
+    padding-right: 10px;
+}
+
+.name-fitem2 {
+    width: 50%;
+}
+
+.form-outline {
+    position: relative;
+}
+
+.form-label {
+    position: absolute;
+    top: 0.3rem;
+    left: 0.6rem;
+    padding-left: 0.3rem;
+    cursor: text;
+}
+
+#extra {
+    border: 1px solid #dbd5d5;
+    border-radius: 4px;
+    padding: 7px;
+    background: #fff;
+}
+
+#extralabel {
+    position: relative;
+    top: -1.2rem;
+    left: 0.25rem;
+    font-size: 12px;
+    background: white;
+}
+
+#custom:focus ~ .form-label,
+#custom:not(:placeholder-shown)#custom:not(:focus) ~ .form-label,
+#custom1:focus ~ .form-label,
+#custom1:not(:placeholder-shown)#custom1:not(:focus) ~ .form-label,
+#custom2:focus ~ .form-label,
+#custom2:not(:placeholder-shown)#custom2:not(:focus) ~ .form-label,
+#selectname:focus ~ .form-label,
+#selectname:not(:placeholder-shown)#selectname:not(:focus) ~ .form-label,
+.custom3:focus ~ .form-label,
+.custom3:not(:placeholder-shown).custom3:not(:focus) ~ .form-label {
+    top: -0.6rem;
+    left: 0.5rem;
+    font-size: 12px;
+    background: white;
+    color: #000;
+}
+
+input[type="file"] ~ .form-label {
+    top: -0.6rem;
+    left: 0.5rem;
+    font-size: 13px;
+    background: linear-gradient(white, #ececec);
+}
+
+#day {
+    /*border: 2px solid black;*/
+    border-radius: 150px;
+    font-size: 12px;
+    margin: 0 5px;
+}
+
+#gender {
+    border: 1px solid #dbd5d5;
+    border-radius: 4px;
+    padding: 5px;
+    color: #000;
+}
+
+#lgender {
+    position: absolute;
+    top: 14.25rem;
+    left: 8.75rem;
+    font-size: 13px;
+    background: white;
+    color: #000;
+}
+
+#gen {
+    color: #000;
+}
+
+span {
+    font-size: 14px;
+}
+
+.container {
+    padding: 8px 0;
+}
+
+form {
+    background: #fff;
+    margin: 30px auto;
+    width: 90%;
+    padding: 15px 40px 40px 40px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/*.step {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    background: #0b5788;
+    border-radius: 50%;
+    line-height: 15px;
+    margin: 0 2px;
+    opacity: 0.25;
+}*/
+
+.headline {
+    text-align: center;
+    padding-bottom: 10px;
+    font-family: 'Bree Serif', serif;
+    color: #0b5788;
+    /*min-width: 200px;*/
+}
+
+.headline h1 {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 52px;
+}
+
+/*.tab {
+    padding: 10px 50px;
+}*/
+
+.day-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#day {
+    border-radius: 50%;
+    font-size: 18px;
+    margin: 0 25px;
+}
+
+#addIcon {
+    display: none;
+}
+
+/*.AddClinic-flex {
+    display: flex;*/
+    /*justify-content: space-between;*/
+/*}*/
+
+/*.aitem1 {
+    padding-right: 10px;
+    width: 90%;
+}*/
+
+/*.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.main {
+    max-width: 850px;
+    width: 100%;
+    background: #fff;
+    padding: 40px 30px;*/
+/*box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);*/
+/*}
+
+.main form {
+    height: 100%;
+    width: 100%;
+    background: #fff;
+}
+
+.main .form-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-content .main-form, 
+.form-content .main-img {
+    width: calc(100% / 2 - 25px);
+}*/
+@media(max-width: 600px) {
+    /*.day-flex {
+        justify-content: initial;
+    }*/
+
+    .headline h1 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    #day {
+        font-size: 10px;
+        margin: 5px;
+    }
+
+    label {
+        font-size: 15px;
+    }
+}
+
+/*@media(max-width: 519px) {
+
+    label {
+        font-size: 14px;
+    }
+}*/
+
+@media(max-width: 500px) {
+
+    .bx-plus {
+        font-size: 28px;
+    }
+
+    #addIcon {
+        display: block;
+        padding: 3px 10px;
+    }
+
+    #add {
+        display: none;
+    }
+
+    .AddClinic-flex {
+        display: flex;
+        /*justify-content: space-between;*/
+    }
+
+    .aitem1 {
+        padding-right: 5px;
+        /*width: 120%;*/
+    }
+
+    .aitem2 {
+        align-self: flex-end;
+    }
+
+    #clinicForm {
+        /*padding: 15px 75px 45px 75px;*/
+        margin: 28px;
+    }
+}
+
+@media(max-width: 375px) {
+
+    #clinicForm {
+        /*padding: 15px 35px 45px 35px;*/
+        margin: 18px;
+    }
+}
+
+@media(max-width: 415px) {
+
+    #clinicForm {
+        /*padding: 15px 35px 45px 35px;*/
+        margin: 38px;
+    }
+}
+
+@media(max-width: 394px) {
+
+    #clinicForm {
+        /*padding: 15px 35px 45px 35px;*/
+        margin: 33px;
+    }
+}
+
+@media(max-width: 376px) {
+
+    #clinicForm {
+        /*padding: 15px 35px 45px 35px;*/
+        margin: 28px;
+    }
+}
+
+@media(max-width: 361px) {
+
+    .gen {
+        font-size: 13px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    #clinicForm {
+        /*padding: 15px 35px 45px 35px;*/
+        margin: 25px;
+    }
+}   
+
+@media(max-width: 280px) {
+
+    label {
+        font-size: 9.25px;
+    }
+
+    .text-warning {
+        font-size: 12px;
+    }
+
+    #clinicForm {
+        /*padding: 15px 35px 45px 35px;*/
+        margin: 15px;
+    }
+}

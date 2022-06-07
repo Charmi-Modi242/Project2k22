@@ -1,35 +1,196 @@
-﻿body {
-    background-image: url('/Images/photo3.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+﻿@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+
+label {
+    color: gray;
 }
+
+.form-outline {
+    position: relative;
+}
+
+.form-label {
+    position: absolute;
+    top: 0.3rem;
+    left: 0.6rem;
+    padding-left: 0.3rem;
+    cursor: text;
+}
+
+#custom:focus ~ .form-label,
+#custom:not(:placeholder-shown)#custom:not(:focus) ~ .form-label {
+    top: -0.6rem;
+    left: 0.5rem;
+    font-size: 12px;
+    background: white;
+    color: #000;
+}
+
+span {
+    font-size: 14px;
+}
+
+.container {
+    padding: 8px 0;
+}
+
+form {
+    background: #fff;
+    margin: 30px auto;
+    width: 90%;
+    padding: 15px 40px 40px 40px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.headline {
+    text-align: center;
+    padding-bottom: 10px;
+    font-family: 'Bree Serif', serif;
+    color: #0b5788;
+    /*min-width: 200px;*/
+}
+
+.headline h1 {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 52px;
+}
+
+#addIcon {
+    display: none;
+}
+
+@media(max-width: 600px) {
+
+    .headline h1 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    #day {
+        font-size: 10px;
+        margin: 5px;
+    }
+
+    label {
+        font-size: 15px;
+    }
+}
+
+@media(max-width: 500px) {
+
+    .bx-plus {
+        font-size: 28px;
+    }
+
+    #addIcon {
+        display: block;
+        padding: 3px 10px;
+    }
+
+    #add {
+        display: none;
+    }
+
+    .AddClinic-flex {
+        display: flex;
+        /*justify-content: space-between;*/
+    }
+
+    .aitem1 {
+        padding-right: 5px;
+        /*width: 120%;*/
+    }
+
+    .aitem2 {
+        align-self: flex-end;
+    }
+
+    #clinicForm {
+        /*padding: 15px 75px 45px 75px;*/
+        margin: 28px;
+    }
+}
+
+@media(max-width: 415px) {
+
+    #clinicForm {
+        /*padding: 15px 35px 45px 35px;*/
+        margin: 20px;
+    }
+}
+
+@media(max-width: 376px) {
+
+    #clinicForm {
+        /*padding: 15px 35px 45px 35px;*/
+        margin: 18px;
+    }
+}
+
+@media(max-width: 360px) {
+
+    .gen {
+        font-size: 13px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+}
+
+@media(max-width: 280px) {
+
+    /*.headline h1 {
+        font-size: 20px;
+        line-height: 25px;
+    }*/
+
+    label {
+        font-size: 9.25px;
+    }
+
+    .text-warning {
+        font-size: 12px;
+    }
+
+    #clinicForm {
+        /*padding: 15px 35px 45px 35px;*/
+        margin: 15px;
+    }
+}
+
+/*body {*/
+    /*background-image: url('/Images/photo3.jpg');*/
+    /*background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;*/
+/*}
 
 
 .home_content {
     padding-top: 30px;
-}
+}*/
 
 /*.container {
     padding-top: 30px;
 }*/
-.main-flex {
+/*.main-flex {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap;*/
     /*max-width: 45%;*/
     /*justify-content: center;*/
-    justify-content: space-between;
+    /*justify-content: space-between;
 }
 
-.mf1 {
+.mf1 {*/
     /*order: 3;*/
     /*width: 100%;*/
-    padding: 0 30px;
+    /*padding: 0 30px;
     justify-content: center;
 }
 
 .card {
-    /*padding: 50px 50px;*/
+    padding: 50px;
 }
 
 .day-flex {
@@ -38,13 +199,13 @@
     justify-content: space-between;
 }
 
-/*.mf2 {
+.mf2 {
     width: 50%;
     flex-shrink: 2;
     height: 100%;
     align-self: center;
-}*/
-/*.mf2 .svgImg {
+}
+.mf2 .svgImg {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -55,7 +216,7 @@
     height: auto;
 }*/
 
-.name-flex {
+/*.name-flex {
     display: flex;
     flex-wrap: wrap;
 }
@@ -119,9 +280,9 @@ input[type="file"] ~ .form-label {
     background: linear-gradient(white, #ececec);
 }
 
-#day {
+#day {*/
     /*border: 2px solid black;*/
-    border-radius: 150px;
+    /*border-radius: 150px;
     font-size: 12px;
     margin: 0 5px;
 }
@@ -142,9 +303,9 @@ input[type="file"] ~ .form-label {
 
 span {
     font-size: 14px;
-}
+}*/
 /* tablet and ipad */
-@media (max-width: 912px) {
+/*@media (max-width: 912px) {*/
     /*.home_content {
         padding-left: 10px;
     }*/
@@ -152,40 +313,40 @@ span {
         justify-content: space-evenly;
     }*/
 
-    .mf1 {
+    /*.mf1 {*/
         /*padding-top: 50px;*/
-        padding-right: 0;
+        /*padding-right: 0;
         padding-left: 20px;
         padding-bottom: 0;
-    }
+    }*/
     /*mf2 {
         width: 100%;
     }*/
-}
+/*}
 
 @media (max-width: 768px) {
 
     body {
         background-image: none;
         background: #e0f3fa;
-    }
+    }*/
 
     /*.home_content {
         padding-left: 50px;
     }*/
 
-    .main-flex {
+    /*.main-flex {
         justify-content: space-evenly;
     }
 
-    .mf1 {
+    .mf1 {*/
         /*padding-top: 50px;*/
-        padding: 0 15px;
-    }
+        /*padding: 0 15px;
+    }*/
     /*mf2 {
         width: 100%;
     }*/
-}
+/*}
 
 @media(max-width: 519px) {
 
@@ -242,4 +403,4 @@ span {
     label {
         font-size: 10px;
     }
-}
+}*/

@@ -178,6 +178,10 @@ input[type="file"] ~ .form-label {
         height: 40px;
     }
 
+    .text-danger {
+        font-size: 8px;
+    }
+
     .form-label {
         position: absolute;
         top: 0.4rem;
@@ -297,5 +301,17 @@ input[type="file"] ~ .form-label {
         line-height: 2px;
         font-weight: 500;
         height: 20px;
+    }
+}
+
+@media(max-width: 280px) {
+
+    .wrapper {
+        padding: 30px 15px 0;
+    }
+
+    .form-label {
+        left: .4rem;
+        font-size: 7.5px;
     }
 }

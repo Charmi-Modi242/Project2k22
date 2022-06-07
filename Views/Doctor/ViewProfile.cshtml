@@ -5,7 +5,7 @@
 @{
     ViewData["Title"] = "Profile";
 }
-<link rel="stylesheet" href="~/css/formSite.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/formDesign.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/profileSite.css" asp-append-version="true" />
 <div class="container">
     @*<br />
@@ -20,7 +20,7 @@
         <div class="shadow-sm card p-3 mb-5 rounded">
             <div class="row">
                 <div class="col-8">
-                    <div class="headline"><span class="material-icons px-2" id="info" style="font-size: 18px;">info</span>Personal Info</div>
+                    <div class="heading"><span class="material-icons px-2" id="info" style="font-size: 18px;">info</span>Personal Info</div>
                 </div>
                 <div class="col-4" align="right">
                     @*<a asp-controller="Doctor" asp-action="EditDoctor"><span class="material-icons e-icon btn btn-outline-dark" title="Edit">mode_edit</span></a>
@@ -33,12 +33,12 @@
             <div class="flex-container">
                 <div class="flex-item item1">
                     <a href="../@ViewBag.Doctor.photo">
-                        <img src="../@ViewBag.Doctor.photo" style="border-radius : 50%; border: 1px solid #ddd; padding: 5px; width: 200px; height: 200px;" @*class="img-fluid"*@ />
+                        <img src="../@ViewBag.Doctor.photo" @*class="img-fluid"*@ />
                     </a>
                 </div>
                 <div class="flex-item item2">
                     @*<br />*@
-                    <h1>@ViewBag.Doctor.fname @ViewBag.Doctor.lname</h1>
+                    <h1>Dr. @ViewBag.Doctor.fname @ViewBag.Doctor.lname</h1>
                     <dl>
                         <dt>Email</dt>
                         <dd>@ViewBag.Doctor.email</dd>
@@ -50,7 +50,7 @@
             @*</div>*@
         </div>
         <div class="shadow-sm card p-3 mb-5 rounded">
-            <div class="headline"><span class="material-icons px-2" id="info" style="font-size: 18px;">info</span>Clinics Info</div>
+            <div class="heading"><span class="material-icons px-2" id="info" style="font-size: 18px;">info</span>Clinics Info</div>
             <div class="ps-4">
                 <ul type="none">
                     @for (int i = 0; i < ViewBag.cID.Length; i++)

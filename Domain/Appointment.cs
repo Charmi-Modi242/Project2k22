@@ -11,7 +11,7 @@ namespace physioCard.Domain
         public int doctorID { get; set; }
         [Required(ErrorMessage = "SELECT DATE")]
         public DateTime date_start { get; set; }
-        public string[]? days { get; set; }
+        public bool[]? days { get; set; }
         public DateTime date_end { get; set; }
         [Required(ErrorMessage = "SELECT SESSION START TIME")]
         public DateTime starttime { get; set; }
@@ -24,5 +24,6 @@ namespace physioCard.Domain
         public String? fname { get; set; }
         public String? lname { get; set; }
         public String? name { get; set; }
+        public bool? attendance_status { get; set; }
     }
 }

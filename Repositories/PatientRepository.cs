@@ -73,7 +73,7 @@ namespace physioCard.Repositories
         {
             try
             {
-                string sql = "select * from patientTB where docID=@id";
+                string sql = "select * from patientTB where docID=@id order by registerdate desc";
                 var param = new DynamicParameters();
                 param.Add("id", id, DbType.Int32);
                 using (var connection = CreateConnection())

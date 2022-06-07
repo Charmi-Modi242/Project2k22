@@ -34,5 +34,13 @@ namespace physioCard.Services
         {
             return _appointmentRepository.deleteAppointmentAsync(appointmentID);
         }
+        public Task<bool> checkAppointmentClashes(Appointment appointment)
+        {
+            return _appointmentRepository.checkAppointmentClashesAsync(appointment);
+        }
+        public Task<List<Appointment>> getClashedAppointments(Appointment appointment)
+        {
+            return _appointmentRepository.getClashedAppointmentsAsync(appointment);
+        }
     }
 }

@@ -5,33 +5,31 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 *@
 @{
 }
-<link rel="stylesheet" href="~/css/formSite.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/formDesign.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/tableSite.css" asp-append-version="true" />
 <div class="container p-3">
     <br />
     <h1>Your Patients</h1>
     <hr /><br />
     <div class="container">
-        <form method="post" asp-action="searchbypatient">
-            <div class="row">
-                <div class="col-9"></div>
-                <div class="col-3">
-                    <div class="form-group">
-                        <div class="form-outline">
-                            @*@Html.TextBox("txtname","",new{@class="form-control", @placeholder="Enter Name"})*@
-                            <input class="form-control mr-sm-2" id="myfilter" type="search" placeholder="Search" aria-label="Search" onkeyup="search()">
-                        </div>
+        <div class="search-flex">
+            <div class="sitem s2"></div>
+            <div class="sitem s1">
+                <div class="form-group">
+                    <div class="form-outline">
+                        @*@Html.TextBox("txtname","",new{@class="form-control", @placeholder="Enter Name"})*@
+                        <input class="form-control mr-sm-2" id="myfilter" type="search" placeholder="Search" aria-label="Search" onkeyup="search()">
                     </div>
                 </div>
-                @*<div class="col-1">
-                <div class="form-group">
-                <div class="form-outline">
-                <input type="submit" value="Search" class="btn-dark form-control" />
-                </div>
-                </div>
-                </div>*@
             </div>
-        </form>
+            @*<div class="col-1">
+            <div class="form-group">
+            <div class="form-outline">
+            <input type="submit" value="Search" class="btn-dark form-control" />
+            </div>
+            </div>
+            </div>*@
+        </div>
     </div>
     <br />
     <div class="container">
@@ -57,7 +55,8 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                         <td data-label="Age">@item.age</td>
                         <td data-label="E-mail">@item.email</td>
                         <td data-label="Contact No">@item.contactno</td>
-                        <td data-label="Operations"><a href="#" class="edit" data-bs-toggle="modal" data-bs-target="#editPatient" data-id="@item.patientID">Edit</a> |
+                        <td data-label="Operations">
+                            <a href="#" class="edit" data-bs-toggle="modal" data-bs-target="#editPatient" data-id="@item.patientID">Edit</a> |
                             <a asp-controller="Patient" asp-action="showPatientdetails" asp-route-id="@item.patientID">Details</a>
                         </td>
                     </tr>

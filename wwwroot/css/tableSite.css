@@ -6,12 +6,24 @@ table {
     /*table-layout: fixed;*/
     border-collapse: collapse;
     margin: 0 auto;
+    background: white;
+    border-radius: 25px;
 }
 
 th {
     background: black;
     color: #fff;
     font-weight: 600;
+}
+
+.search-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.s2{
+    width: 30%;
 }
 
 td, th {
@@ -22,6 +34,11 @@ td, th {
 }
 
 @media(max-width: 768px) {
+
+    table {
+        background: #e0f3fa;
+    }
+
     td, tr{
         display: block;
     }

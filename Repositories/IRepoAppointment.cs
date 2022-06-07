@@ -10,5 +10,7 @@ namespace physioCard.Repositories
         Task<Appointment> getAppointmentByIDAsync(int appointmentID);
         Task<bool> rescheduleAppointmentAsync(Appointment appointment);
         Task<bool> deleteAppointmentAsync(int appointmentID);
+        Task<bool> checkAppointmentClashesAsync(Appointment appointment);
+        Task<List<Appointment>> getClashedAppointmentsAsync(Appointment appointment);
     }
 }

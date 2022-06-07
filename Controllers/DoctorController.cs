@@ -151,22 +151,31 @@ namespace physioCard.Controllers
                 int did = (int)HttpContext.Session.GetInt32("docID");
                 Doctor doctor = await _doctorService.GetByIDAsync(did);
                 List<Clinic> clinics = await _clinicService.GetByDoctorIDAsync(did);
-                //Tuple<Doctor, List<Clinic>> tuple = new Tuple<Doctor, List<Clinic>>(doctor, clinics);
-                string[] name = new string[clinics.Count];
-                for (int i = 0; i < clinics.Count; i++)
+
+                if (clinics.Count <= 0)
                 {
-                    name[i] = clinics[i].name;
+                    return RedirectToAction("AddDoctorClinic", "Clinic");
                 }
-                int[] id = new int[clinics.Count];
-                for (int i = 0; i < clinics.Count; i++)
+
+                else
                 {
-                    id[i] = clinics[i].clinicID;
+                    //Tuple<Doctor, List<Clinic>> tuple = new Tuple<Doctor, List<Clinic>>(doctor, clinics);
+                    string[] name = new string[clinics.Count];
+                    for (int i = 0; i < clinics.Count; i++)
+                    {
+                        name[i] = clinics[i].name;
+                    }
+                    int[] id = new int[clinics.Count];
+                    for (int i = 0; i < clinics.Count; i++)
+                    {
+                        id[i] = clinics[i].clinicID;
+                    }
+                    ViewBag.cID = id;
+                    ViewBag.cName = name;
+                    ViewBag.data = await _dashBoardController.getProfileAsync(did);
+                    ViewBag.Doctor = doctor;
+                    return View();
                 }
-                ViewBag.cID = id;
-                ViewBag.cName = name;
-                ViewBag.data = await _dashBoardController.getProfileAsync(did);
-                ViewBag.Doctor = doctor;
-                return View();
             }
             catch (Exception ex)
             {

@@ -24,71 +24,142 @@ namespace physioCard.Controllers
             return View();
         }
 
-
-
         public async Task<IActionResult> FixAppointment()
         {
             int did = (int)HttpContext.Session.GetInt32("docID");
             ViewBag.data = await _dashBoardController.getProfileAsync(did);
             ViewBag.PatientName = new SelectList(await _appointmentService.getPatientName(did), "patientID", "fname");
+            List<Appointment> appointment = new List<Appointment>();
+            appointment.Add(new Appointment { appointmentID = 0, doctorID = 0, patientID = 0, fname = "xyz", lname = "xyz", name = "xyz", date_start = DateTime.Now, date_end = DateTime.Now, starttime = DateTime.Now, endtime = DateTime.Now, sessiontime = DateTime.Now, cost = 0 });
+            ViewBag.AppointmentClashStatus = false;
+            ViewBag.ClashedAppointments = appointment;
             return View();
         }
-
-
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> FixAppointment(Appointment appointment)
         {
+            List<Appointment> sappointment = new List<Appointment>();
             try
             {
+                bool cstatus;
+                //String today = DateTime.Now.ToString("dd-MM-yyyy");
                 int did = (int)HttpContext.Session.GetInt32("docID");
                 ViewBag.PatientName = new SelectList(await _appointmentService.getPatientName(did), "patientID", "fname");
                 ViewBag.data = await _dashBoardController.getProfileAsync(did);
                 appointment.doctorID = did;
                 appointment.cost = (int)appointment.cost;
+                string day = null;
                 if (ModelState.IsValid)
                 {
-                    if (DateTime.Equals(appointment.date_start, appointment.date_end))
+                    DateTime today = DateTime.Now.Date;
+                    DateTime date = appointment.date_start.Date;
+                    String time = DateTime.Now.ToString("HH-mm");
+                    if (DateTime.Compare(date, today) >= 0)
                     {
-                        await _appointmentService.FixAppointment(appointment);
+                        if (DateTime.Equals(appointment.date_start, appointment.date_end))
+                        {
+                            cstatus = await _appointmentService.checkAppointmentClashes(appointment);
+                            if (cstatus)
+                            {
+                                ViewBag.AppointmentClashStatus = true;
+                                List<Appointment> clashed_appointments = await _appointmentService.getClashedAppointments(appointment);
+                                ViewBag.ClashedAppointments = clashed_appointments;
+                                return View();
+                            }
+                            else
+                            {
+                                await _appointmentService.FixAppointment(appointment);
+                            }
+                        }
+                        else
+                        {
+                            List<Appointment> clashed_appointments = new List<Appointment>();
+                            cstatus = await _appointmentService.checkAppointmentClashes(appointment);
+                            if (cstatus)
+                            {
+                                ViewBag.AppointmentClashStatus = true;
+                                List<Appointment> tempclashed_appointments = await _appointmentService.getClashedAppointments(appointment);
+                                foreach (var item in tempclashed_appointments)
+                                {
+                                    clashed_appointments.Add(item);
+                                }
+                            }
+                            else
+                            {
+                                await _appointmentService.FixAppointment(appointment);
+                            }
+
+                            int days = (appointment.date_end - appointment.date_start).Days;
+                            for (int i = 0; i < days; i++)
+                            {
+                                appointment.date_start = appointment.date_start.AddDays(1);
+                                for (int d = 0; d <= 6; d++)
+                                {
+                                    if (appointment.days[d] != false)
+                                    {
+                                        switch (d)
+                                        {
+                                            case 0:
+                                                day = "Monday";
+                                                break;
+                                            case 1:
+                                                day = "Tuesday";
+                                                break;
+                                            case 2:
+                                                day = "Wednesday";
+                                                break;
+                                            case 3:
+                                                day = "Thursday";
+                                                break;
+                                            case 4:
+                                                day = "Friday";
+                                                break;
+                                            case 5:
+                                                day = "Saturday";
+                                                break;
+                                            case 6:
+                                                day = "Sunday";
+                                                break;
+                                        }
+                                        if (appointment.date_start.DayOfWeek.ToString() == day)
+                                        {
+                                            cstatus = await _appointmentService.checkAppointmentClashes(appointment);
+                                            if (cstatus)
+                                            {
+                                                ViewBag.AppointmentClashStatus = true;
+                                                List<Appointment> tempclashed_appointments = await _appointmentService.getClashedAppointments(appointment);
+                                                foreach (var item in tempclashed_appointments)
+                                                {
+                                                    clashed_appointments.Add(item);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                await _appointmentService.FixAppointment(appointment);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (clashed_appointments.Count > 0)
+                            {
+                                ViewBag.ClashedAppointments = clashed_appointments;
+                                return View();
+                            }
+                        }
+                        return RedirectToAction(nameof(showAppointment));
                     }
                     else
                     {
-                        await _appointmentService.FixAppointment(appointment);
-                        int days = (appointment.date_end - appointment.date_start).Days;
-                        //String[] tempdays = null;
-                        //int i=0;
-                        //foreach(var day in appointment.days)
-                        //{
-                        // if(day!="false")
-                        // {
-                        // tempdays[i] = day;
-                        // i++;
-                        // }
-                        //}
-                        for (int i = 0; i < days; i++)
-                        {
-                            appointment.date_start = appointment.date_start.AddDays(1);
-                            foreach (var day in appointment.days)
-                            {
-                                if (day != "false")
-                                {
-                                    if (appointment.date_start.DayOfWeek.ToString() == day)
-                                    {
-                                        await _appointmentService.FixAppointment(appointment);
-                                    }
-                                }
-
-                            }
-                        }
+                        sappointment.Add(new Appointment { appointmentID = 0, doctorID = 0, patientID = 0, fname = "xyz", lname = "xyz", name = "xyz", date_start = DateTime.Now, date_end = DateTime.Now, starttime = DateTime.Now, endtime = DateTime.Now, sessiontime = DateTime.Now, cost = 0 });
+                        ViewBag.AppointmentClashStatus = false;
+                        ViewBag.ClashedAppointments = sappointment;
+                        ViewBag.DateError = true;
+                        return View();
                     }
-                    return RedirectToAction(nameof(showAppointment));
                 }
-
-
-
-
             }
             catch (Exception ex)
             {
@@ -96,10 +167,11 @@ namespace physioCard.Controllers
                 "Try Again, and if the problem persists" +
                 "See your system administrator.");
             }
+            sappointment.Add(new Appointment { appointmentID = 0, doctorID = 0, patientID = 0, fname = "xyz", lname = "xyz", name = "xyz", date_start = DateTime.Now, date_end = DateTime.Now, starttime = DateTime.Now, endtime = DateTime.Now, sessiontime = DateTime.Now, cost = 0 });
+            ViewBag.AppointmentClashStatus = false;
+            ViewBag.ClashedAppointments = sappointment;
             return View();
         }
-
-
 
         public async Task<IActionResult> showAppointment()
         {
@@ -116,8 +188,6 @@ namespace physioCard.Controllers
             return View();
         }
 
-
-
         //public async Task<IActionResult> showAppointment(bool sdelete)
         //{
         // int did = (int)HttpContext.Session.GetInt32("docID");
@@ -133,8 +203,6 @@ namespace physioCard.Controllers
         // return View(appointments);
         //}
 
-
-
         //[AutoValidateAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> getAppointmentByID(int appointmentID)
@@ -142,8 +210,6 @@ namespace physioCard.Controllers
             Appointment appointment = await _appointmentService.getAppointmentByID(appointmentID);
             return Json(appointment);
         }
-
-
 
         [AutoValidateAntiforgeryToken]
         [HttpPost]
@@ -189,8 +255,6 @@ namespace physioCard.Controllers
             }
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> deleteAppointment(int appointmentID)
         {
@@ -219,8 +283,6 @@ namespace physioCard.Controllers
             catch (Exception ex)
             {
                 ViewBag.statusdelete = false;
-
-
 
                 ModelState.AddModelError("", "Unable to reschedule appointment. " +
                 "Try Again, and if the problem persists" +
