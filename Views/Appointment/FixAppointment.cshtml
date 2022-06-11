@@ -21,7 +21,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
     <hr /><br />*@
     <div>
         @*<div class="shadow-sm card p-3 mb-5 rounded">*@
-        <form method="post" enctype="multipart/form-data" asp-for="FixAppointment">
+        <form method="post" enctype="multipart/form-data" id="myForm" asp-for="FixAppointment">
             <div class="headline">
                 <h1>Schedule Appointment</h1>
             </div>
@@ -66,31 +66,31 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     <label id="extralabel">&nbsp;Days&nbsp;</label>
                     <div class="day-flex">
                         <div class="day-fitem">
-                            <input type="checkbox" class="btn-check" id="btn-check-6" asp-for="days[6]" disabled="disabled">
+                            <input type="checkbox" class="btn-check d" id="btn-check-6" asp-for="days[6]" disabled="disabled">
                             <label class="btn btn-outline-dark" for="btn-check-6" id="day">S</label>
                         </div>
                         <div class="day-fitem">
-                            <input type="checkbox" class="btn-check" id="btn-check-0" asp-for="days[0]" disabled="disabled">
+                            <input type="checkbox" class="btn-check d" id="btn-check-0" asp-for="days[0]" disabled="disabled">
                             <label class="btn btn-outline-dark" for="btn-check-0" id="day">M</label>
                         </div>
                         <div class="day-fitem">
-                            <input type="checkbox" class="btn-check" id="btn-check-1" asp-for="days[1]" disabled="disabled">
+                            <input type="checkbox" class="btn-check d" id="btn-check-1" asp-for="days[1]" disabled="disabled">
                             <label class="btn btn-outline-dark" for="btn-check-1" id="day">T</label>
                         </div>
                         <div class="day-fitem">
-                            <input type="checkbox" class="btn-check" id="btn-check-2" asp-for="days[2]" disabled="disabled">
+                            <input type="checkbox" class="btn-check d" id="btn-check-2" asp-for="days[2]" disabled="disabled">
                             <label class="btn btn-outline-dark" for="btn-check-2" id="day">W</label>
                         </div>
                         <div class="day-fitem">
-                            <input type="checkbox" class="btn-check" id="btn-check-3" asp-for="days[3]" disabled="disabled">
+                            <input type="checkbox" class="btn-check d" id="btn-check-3" asp-for="days[3]" disabled="disabled">
                             <label class="btn btn-outline-dark" for="btn-check-3" id="day">T</label>
                         </div>
                         <div class="day-fitem">
-                            <input type="checkbox" class="btn-check" id="btn-check-4" asp-for="days[4]" disabled="disabled">
+                            <input type="checkbox" class="btn-check d" id="btn-check-4" asp-for="days[4]" disabled="disabled">
                             <label class="btn btn-outline-dark" for="btn-check-4" id="day">F</label>
                         </div>
                         <div class="day-fitem">
-                            <input type="checkbox" class="btn-check" id="btn-check-5" asp-for="days[5]" disabled="disabled">
+                            <input type="checkbox" class="btn-check d" id="btn-check-5" asp-for="days[5]" disabled="disabled">
                             <label class="btn btn-outline-dark" for="btn-check-5" id="day">S</label>
                         </div>
                     </div>
@@ -131,7 +131,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             <br />
             <div class="form-group">
                 <input type="submit" value="FIX" class="btn btn-primary" onclick="return defaultvalue();" />
-                <a asp-action="FixAppointment" class="btn btn-outline-primary">Reset</a>
+                <a asp-action="FixAppointment" class="btn btn-secondary">Reset</a>
             </div>
         </form>
         @*</div>*@

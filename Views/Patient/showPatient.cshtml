@@ -7,35 +7,24 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 }
 <link rel="stylesheet" href="~/css/formDesign.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/tableSite.css" asp-append-version="true" />
-<div class="container p-3">
-    <br />
+<div class="container wrapper p-3">
+    @*<br />
     <h1>Your Patients</h1>
-    <hr /><br />
-    <div class="container">
-        <div class="search-flex">
-            <div class="sitem s2"></div>
-            <div class="sitem s1">
-                <div class="form-group">
-                    <div class="form-outline">
-                        @*@Html.TextBox("txtname","",new{@class="form-control", @placeholder="Enter Name"})*@
-                        <input class="form-control mr-sm-2" id="myfilter" type="search" placeholder="Search" aria-label="Search" onkeyup="search()">
-                    </div>
-                </div>
+    <hr />*@
+    <div class="search-flex">
+        <div class="sitem s2">
+            <div class="headline1">
+                <h1>Your Patients</h1>
             </div>
-            @*<div class="col-1">
-            <div class="form-group">
-            <div class="form-outline">
-            <input type="submit" value="Search" class="btn-dark form-control" />
-            </div>
-            </div>
-            </div>*@
+        </div>
+        <div class="sitem s1">
+            <input class="form-control mr-sm-2" id="myfilter" type="search" placeholder="Search" aria-label="Search" onkeyup="search()">
         </div>
     </div>
-    <br />
     <div class="container">
         <table class="table table-hover" id="mytable">
             <thead>
-                <tr class="bg-dark text-white">
+                <tr>
                     <th hidden="hidden">ID</th>
                     <th></th>
                     <th>Name</th>

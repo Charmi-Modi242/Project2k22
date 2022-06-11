@@ -290,5 +290,22 @@ namespace physioCard.Controllers
                 return View("showAppointment");
             }
         }
+
+        public async Task<ActionResult> AppointmentCalendar() {
+            int did = (int)HttpContext.Session.GetInt32("docID");
+            ViewBag.data = await _dashBoardController.getProfileAsync(did);
+            return View();
+        }
+
+        public async Task<IActionResult> GetAppointments()
+        {
+            int did = (int)HttpContext.Session.GetInt32("docID");
+            List<Appointment> appList = await _appointmentService.getAllAppointments(did);
+            foreach (var item in appList)
+            {
+                item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
+            }
+            return Json(appList);
+        }
     }
 }

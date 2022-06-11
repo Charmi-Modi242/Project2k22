@@ -283,27 +283,35 @@ namespace physioCard.Controllers
                 ViewBag.data = await _dashBoardController.getProfileAsync(did);
                 if (f.oldpassword != null)
                 {
-                    if (f.password == f.confirmpassword)
+                    if (f.password != null && f.confirmpassword != null)
                     {
-                        Doctor doctor = await _doctorService.GetByIDAsync(did);
-                        f.oldpassword = CustomSecurity.ConvertToEncrypt(f.oldpassword);
-                        if (f.oldpassword == doctor.password)
+                        if (f.password == f.confirmpassword)
                         {
-                            f.password = CustomSecurity.ConvertToEncrypt(f.password);
-                            await _doctorService.changepassword(did, f.password);
-                            ViewBag.Status = true;
+                            Doctor doctor = await _doctorService.GetByIDAsync(did);
+                            f.oldpassword = CustomSecurity.ConvertToEncrypt(f.oldpassword);
+                            if (f.oldpassword == doctor.password)
+                            {
+                                f.password = CustomSecurity.ConvertToEncrypt(f.password);
+                                await _doctorService.changepassword(did, f.password);
+                                ViewBag.Status = true;
+                            }
+                            else
+                            {
+                                ViewBag.Status = false;
+                                ViewBag.error = "OLD PASSWORD DOES NOT MATCH";
+                            }
+                            return View();
                         }
                         else
                         {
                             ViewBag.Status = false;
-                            ViewBag.error = "OLD PASSWORD DOES NOT MATCH";
+                            ViewBag.error = "NEW PASSWORD AND CONFIRM PASSWORD DOES NOT MATCH";
+                            return View();
                         }
-                        return View();
-                    }
-                    else
+                    } else
                     {
                         ViewBag.Status = false;
-                        ViewBag.error = "NEW PASSWORD AND CONFIRM PASSWORD DOES NOT MATCH";
+                        ViewBag.error = "NEW PASSWORD AND CONFIRM PASSWORD IS MANDATORY";
                         return View();
                     }
                 }

@@ -1,6 +1,4 @@
-﻿/*body {
-}
-*/
+﻿@import url('https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@500&display=swap');
 
 table {
     /*table-layout: fixed;*/
@@ -8,6 +6,22 @@ table {
     margin: 0 auto;
     background: white;
     border-radius: 25px;
+}
+
+.headline1 h1 {
+    text-align: left;
+    padding-bottom: 10px;
+    font-family: 'Spline Sans Mono', monospace;
+    color: #0b5788;
+    font-weight: 600;
+}
+
+.search-item {
+    align-self: flex-end;
+}
+
+thead tr {
+    background: #0b5788;
 }
 
 th {
@@ -19,24 +33,35 @@ th {
 .search-flex {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
-.s2{
-    width: 30%;
+.s1 #myfilter {
+    align-self: flex-end;
 }
 
 td, th {
     /*padding: 12px;*/
     /*border: 1px solid #ccc;*/
-    text-align: left;
     text-align: center;
+}
+
+#myfilter {
+    width: 350px;
 }
 
 @media(max-width: 768px) {
 
+    .search-flex {
+        flex-direction: column;
+    }
+
+    .s1 {
+        align-self: flex-end;
+    }
+
     table {
-        background: #e0f3fa;
+        background: #f5f8fb;
     }
 
     td, tr{
@@ -62,7 +87,7 @@ td, th {
         border-bottom: 1px solid #eee;
         position: relative;
         padding-left: 50%;
-        background-color: #F8D9D5;
+        background-color: #f5f8fb;
         text-align: left;
         font-size: 10px;
     }
@@ -88,7 +113,53 @@ td, th {
     }*/
 }
 
+@media(max-width: 415px) {
+
+    table, #myfilter {
+        width: 300px;
+        margin: 0 20px;
+    }
+}
+
+@media(max-width: 394px) {
+
+    table, #myfilter {
+        margin: 0 15px;
+    }
+}
+
+@media(max-width: 376px) {
+
+    #myfilter {
+        width: 300px;
+    }
+
+    table, #myfilter {
+        margin: 0 10px;
+    }
+}
+
+@media(max-width: 361px) {
+
+    table, #myfilter {
+        margin: 0 7px;
+    }
+}
+
 @media(max-width: 280px) {
+
+    .headline1 h1 {
+        font-size: 20px;
+    }
+
+    #myfilter {
+        width: 230px;
+    }
+
+    table, #myfilter {
+        margin: 0 5px;
+    }
+
     td {
         font-size: 10px;
     }

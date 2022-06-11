@@ -16,6 +16,16 @@ label {
     cursor: text;
 }
 
+.btn-primary {
+    background: #0b5788;
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background: #063655;
+}
+
 #custom:focus ~ .form-label,
 #custom:not(:placeholder-shown)#custom:not(:focus) ~ .form-label {
     top: -0.6rem;

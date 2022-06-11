@@ -12,5 +12,6 @@ namespace physioCard.Services
         public Task<bool> deleteAppointment(int appointmentID);
         public Task<bool> checkAppointmentClashes(Appointment appointment);
         public Task<List<Appointment>> getClashedAppointments(Appointment appointment);
+        public Task<List<Appointment>> getAppointmentsAsync();
     }
 }

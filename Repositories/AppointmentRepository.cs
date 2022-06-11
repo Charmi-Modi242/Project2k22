@@ -72,7 +72,7 @@ namespace physioCard.Repositories
             {
                 DateTime date = DateTime.Now;
                 string datestr = date.ToString("dd-MM-yyyy");
-                string sql = "select a.appointmentID, a.patientID, a.doctorID, a.date_start, a.starttime, a.sessiontime, p.fname, p.lname, c.name from appointmentTB a, patientTB p, clinicTB c where a.patientID=p.patientID and p.clinicID=c.clinicID and a.doctorID=@did and a.date_start>=@date order by a.date_start, a.starttime";
+                string sql = "select a.appointmentID, a.patientID, a.doctorID, a.date_start, a.starttime, a.sessiontime, a.attendance_status, p.fname, p.lname, c.name from appointmentTB a, patientTB p, clinicTB c where a.patientID=p.patientID and p.clinicID=c.clinicID and a.doctorID=@did and a.date_start>=@date order by a.date_start, a.starttime";
                 var param = new DynamicParameters();
                 param.Add("did", did, DbType.Int32);
                 param.Add("date", datestr, DbType.Date);
@@ -134,6 +134,23 @@ namespace physioCard.Repositories
                 //throw new Exception(ex.Message);
             }
         }
+
+        public async Task<List<Appointment>> getAppointmentsAsync()
+        {
+            try
+            {
+                string sql = "select * from appointmentTB";
+                using (var connnection = CreateConnection())
+                {
+                    return (await connnection.QueryAsync<Appointment>(sql)).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> deleteAppointmentAsync(int appointmentID)
         {
             try

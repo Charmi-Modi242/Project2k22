@@ -42,5 +42,10 @@ namespace physioCard.Services
         {
             return _appointmentRepository.getClashedAppointmentsAsync(appointment);
         }
+
+        public Task<List<Appointment>> getAppointmentsAsync()
+        {
+            return _appointmentRepository.getAppointmentsAsync();
+        }
     }
 }

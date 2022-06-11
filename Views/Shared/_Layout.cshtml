@@ -58,74 +58,64 @@
         </header>
         <ul class="nav_list">
             <li>
-                <a asp-controller="DashBoard" asp-action="DashBoard">
+                <a asp-controller="DashBoard" asp-action="DashBoard" title="Dashboard">
                     <i class='bx bx-home-alt-2'></i>
                     <span class="links_name">Dashboard</span>
                 </a>
-                <span id="tooltip">Dashboard</span>
             </li>
             <li>
-                <a asp-controller="Patient" asp-action="addPatient">
+                <a asp-controller="Patient" asp-action="addPatient" title="Add Patient">
                     <i class='bx bx-user-plus'></i>
                     <span class="links_name">Add Patient</span>
                 </a>
-                <span id="tooltip">Add Patient</span>
             </li>
             <li>
-                <a asp-controller="Patient" asp-action="showPatient">
+                <a asp-controller="Patient" asp-action="showPatient" title="Show Patient">
                     <i class='bx bxs-user-account'></i>
                     <span class="links_name">Show Patient</span>
                 </a>
-                <span id="tooltip">Show Patient</span>
             </li>
             <li>
-                <a asp-controller="DashBoard" asp-action="DashBoard">
+                <a asp-controller="Appointment" asp-action="AppointmentCalendar" title="Appointment Calendar">
                     <i class='bx bx-calendar'></i>
                     <span class="links_name">Appointment Calendar</span>
                 </a>
-                <span id="tooltip">Appointment Calendar</span>
             </li>
             <li>
-                <a asp-controller="Appointment" asp-action="FixAppointment">
+                <a asp-controller="Appointment" asp-action="FixAppointment" title="Schedule Appointment">
                     <i class='bx bx-calendar-plus'></i>
                     <span class="links_name">Schedule Appointment</span>
                 </a>
-                <span id="tooltip">Schedule Appointment</span>
             </li>
             <li>
-                <a asp-controller="Appointment" asp-action="showAppointment">
+                <a asp-controller="Appointment" asp-action="showAppointment" title="Show Appointment">
                     <i class='bx bx-calendar-heart'></i>
                     <span class="links_name">Show Appointment</span>
                 </a>
-                <span id="tooltip">Show Appointment</span>
             </li>
             <li>
-                <a asp-controller="Attendance" asp-action="showTodaysAppointment">
+                <a asp-controller="Attendance" asp-action="showTodaysAppointment" title="Attendance">
                     <i class='bx bxs-user-check'></i>
                     <span class="links_name">Attendance</span>
                 </a>
-                <span id="tooltip">Attendance</span>
             </li>
             <li>
-                <a asp-controller="DashBoard" asp-action="DashBoard">
+                <a asp-controller="DashBoard" asp-action="DashBoard" title="Generate Invoice">
                     <i class='bx bx-spreadsheet'></i>
                     <span class="links_name">Generate Invoice</span>
                 </a>
-                <span id="tooltip">Generate Invoice</span>
             </li>
             <li>
-                <a asp-controller="DashBoard" asp-action="DashBoard">
+                <a asp-controller="DashBoard" asp-action="DashBoard" title="Payment Status">
                     <i class='bx bx-check-square'></i>
                     <span class="links_name">Payment Status</span>
                 </a>
-                <span id="tooltip">Payment Status</span>
             </li>
             <li>
-                <a asp-controller="Clinic" asp-action="AddDoctorClinic">
+                <a asp-controller="Clinic" asp-action="AddDoctorClinic" title="Add Clinic">
                     <i class='bx bx-clinic'></i>
                     <span class="links_name">Add Clinic</span>
                 </a>
-                <span id="tooltip">Add Clinic</span>
             </li>
             @*<li>
             <a asp-controller="Doctor" asp-action="Changepassword">

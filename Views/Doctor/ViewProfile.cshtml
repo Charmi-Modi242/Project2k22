@@ -61,74 +61,10 @@
             </div>
         </div>
         <div>
-            <a asp-controller="DashBoard" asp-action="DashBoard" class="btn btn-dark">Back To DashBoard</a>
+            <a asp-controller="DashBoard" asp-action="DashBoard" class="btn"> << Back To DashBoard</a>
         </div>
     </div>
 </div>
-
-<!-- Modal For Update Doctor -->
-@*<div class="modal" id="editDoc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4>Update Your Info</h4>
-            </div>
-            <form asp-action="Changepassword" method="post">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <div class="form-outline">
-                                    <input type="password" asp-for="oldpassword" id="password1" class="form-control" placeholder=" " />
-                                    <label class="form-label">Old Password </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <div class="form-outline">
-                                    <input type="password" asp-for="password" onchange="return chkPwd()" id="password" class="form-control pwd" placeholder=" " />
-                                    <label class="form-label">New Password </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <span asp-validation-for="password" id="errPwd" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <div class="form-outline">
-                                    <input type="password" id="Confirmpassword" class="form-control" placeholder=" " asp-for="confirmpassword" />
-                                    <label class="form-label" asp-for="confirmpassword">Confirm New Password </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <span id="errConfirmPwd" asp-validation-for="confirmpassword" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="modal-footer">
-                        <div class="form-group">
-                            <input type="submit" value="Delete" id="DelClinic" class="btn btn-danger" />
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>*@
 
 <!-- Modal For Remove Clinic -->
 <div class="modal" id="delClinic" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -246,52 +182,6 @@
     </div>
 </div>
 <style>
-
-    /*.form-outline {
-        position: relative;
-    }
-
-    .form-label {
-        position: absolute;
-        top: 0.3rem;
-        left: 0.6rem;
-        padding-left: 0.3rem;
-        cursor: text;
-    }
-
-    input:focus ~ .form-label,
-    input:not(:placeholder-shown)input:not(:focus) ~ .form-label {
-        top: -0.8rem;
-        left: 0.5rem;
-        font-size: 13px;
-        background: linear-gradient(aliceblue, white);
-    }
-
-    input[type="file"] ~ .form-label {
-        top: -0.8rem;
-        left: 0.5rem;
-        font-size: 13px;
-        background: linear-gradient(aliceblue, #ececec);
-    }
-
-    #gender {
-        border: 1px solid #dbd5d5;
-        border-radius: 4px;
-        padding: 5px
-    }
-
-    #lgender {
-        position: absolute;
-        top: 14.25rem;
-        left: 8.75rem;
-        font-size: 13px;
-        background: white;
-    }
-
-    span {
-        font-size: 14px;
-    }*/
-
     a.mylink:hover::after {
         background: url(https://fonts.gstatic.com/s/i/materialicons/delete/v17/20px.svg);
         background-size: 20px 20px;
@@ -301,26 +191,13 @@
         content: "";
     }
 
-    .fi1 {
-        /*padding: 20px 130px 0;*/
-        /*justify-content: center;*/
-    }
-
     .fi2 {
-        /*justify-content: center;*/
         max-width: 100px;
         margin: 20px 50px 0;
     }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-@*<script>
-    $(document).ready(function(){
-    $('.mylink').mouseover(function() {
-    myvar = this.id;
-    $('#myIcon '+myvar).show();
-    });
-    });
-    </script>*@
+
 @*client side validation on image and password*@
 <script>
     $(document).ready(function() {
@@ -348,7 +225,10 @@
                             data: { "id": response.clinicID },
                             success: function() {
                                 $.ajax({
-                                    url: '/Doctor/ViewProfile'
+                                    url: '/Doctor/ViewProfile',
+                                    success: function() {
+                                        windows.location.reload();
+                                    }
                                 });
                             }
                         });

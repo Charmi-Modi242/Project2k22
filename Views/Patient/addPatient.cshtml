@@ -6,13 +6,8 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 }
 <link rel="stylesheet" href="~/css/formDesign.css" asp-append-version="true" />
 <div class="container">
-    @*<h1>Add Patient</h1>
-    <hr /><br />*@
     <div>
-        @*        <div class="main-flex">
-        <div class="main-fitem mf1">*@
-        @*<div class="shadow-sm card p-3 mb-5 rounded">*@
-        <form class="form" method="post" enctype="multipart/form-data" asp-for="addPatient">
+        <form class="form" method="post" enctype="multipart/form-data" id="myForm" asp-for="addPatient">
             <div class="headline">
                 <h1>Register Patient</h1>
             </div>
@@ -20,7 +15,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 <div class="name-fitem1">
                     <div class="form-group">
                         <div class="form-outline">
-                            <input asp-for="fname" id="custom" class="form-control" name="fname" placeholder=" " />
+                            <input asp-for="fname" id="custom" class="form-control" placeholder=" " />
                             <label class="form-label">First Name&nbsp</label>
                         </div>
                     </div>
@@ -28,7 +23,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 <div class="name-fitem2">
                     <div class="form-group">
                         <div class="form-outline">
-                            <input asp-for="lname" id="custom" class="form-control" name="lname" placeholder=" " />
+                            <input asp-for="lname" id="custom" class="form-control" placeholder=" " />
                             <label class="form-label">Last Name&nbsp</label>
                         </div>
                     </div>
@@ -36,79 +31,52 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             </div>
             <div class="name-flex">
                 <div class="name-fitem1">
-                    <span asp-validation-for="fname" id="errFname" class="text-danger"></span>
+                    <span asp-validation-for="fname" class="text-danger"></span>
                 </div>
                 <div class="name-fitem2">
-                    <span asp-validation-for="lname" id="errLname" class="text-danger"></span>
+                    <span asp-validation-for="lname" class="text-danger"></span>
                 </div>
             </div>
             <br />
             <div class="form-group" style="background: #fff;">
                 <div class="form-outline" id="gender">
                     <label style="color: #000;" class="px-2 gen ">Gender</label><br />
-                    <input asp-for="gender" id="fm" class="form-check-input" type="radio" name="gender" value="Female" />&nbsp;<label for="fm" id="gen">Female</label><br />
-                    <input asp-for="gender" id="m" class="form-check-input" type="radio" name="gender" value="Male" />&nbsp;<label for="m" id="gen">Male</label>
+                    <input asp-for="gender" id="fm" class="form-check-input" type="radio" value="Female" />&nbsp;<label for="fm" id="gen">Female</label><br />
+                    <input asp-for="gender" id="m" class="form-check-input" type="radio" value="Male" />&nbsp;<label for="m" id="gen">Male</label>
                 </div>
-                <span asp-validation-for="gender" id="errGen" class="text-danger"></span>
+                <span asp-validation-for="gender" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">
                 <div class="form-outline">
-                    <input type="date" asp-for="dob" name="dob" placeholder=" " class="form-control" id="custom" />
+                    <input type="date" asp-for="dob" placeholder=" " class="form-control" id="custom" />
                     <label class="form-label">Date Of Birth&nbsp</label>
                 </div>
-                <span asp-validation-for="dob" id="errDob" class="text-danger"></span>
+                <span asp-validation-for="dob" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">
                 <div class="form-outline">
-                    <textarea asp-for="address" name="addr" placeholder=" " class="form-control" id="custom" style="height : 50px"></textarea>
+                    <textarea asp-for="address" placeholder=" " class="form-control" id="custom" style="height : 50px"></textarea>
                     <label class="form-label">Address&nbsp</label>
                 </div>
-                <span asp-validation-for="address" id="errAddr" class="text-danger"></span>
+                <span asp-validation-for="address" class="text-danger"></span>
             </div>
             <br />
-            @*<div class="name-flex">
-            <div class="name-fitem1">
-            <div class="form-group">
-            <div class="form-outline">
-            <input asp-for="email" id="custom" class="form-control" placeholder=" " />
-            <label class="form-label">E-mail </label>
-            </div>
-            </div>
-            </div>
-            <div class="name-fitem2">
-            <div class="form-group">
-            <div class="form-outline">
-            <input asp-for="contactno" id="custom" class="form-control" placeholder=" " />
-            <label class="form-label">Contact No </label>
-            </div>
-            </div>
-            </div>
-            </div>
-            <div class="name-flex">
-            <div class="name-fitem1">
-            <span asp-validation-for="email" class="text-danger"></span>
-            </div>
-            <div class="name-fitem2">
-            <span asp-validation-for="contactno" class="text-danger"></span>
-            </div>
-            </div>
-            <br />*@
             <div class="form-group">
                 <div class="form-outline">
-                    <input asp-for="email" name="email" id="custom" class="form-control email" placeholder=" " />
+                    <input asp-for="email" id="custom" class="form-control email" placeholder=" " />
                     <label class="form-label">E-mail&nbsp</label>
                 </div>
-                <span asp-validation-for="email" id="errEmail" class="text-danger"></span>
+                <span asp-validation-for="email" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">
                 <div class="form-outline">
-                    <input asp-for="contactno" name="contactno" id="custom" class="form-control contactno" placeholder=" " />
+                    <input asp-for="contactno" id="custom" class="form-control contactno" placeholder=" " />
                     <label class="form-label">Contact No&nbsp</label>
                 </div>
-                <span asp-validation-for="contactno" id="errContact" class="text-danger"></span>
+                <span asp-validation-for="contactno" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">

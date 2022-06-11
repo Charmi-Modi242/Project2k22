@@ -2,48 +2,84 @@
 @*
 For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 @{
     if (ViewBag.statusupdate == true)
     {
-        <script>alert("Appointment Reschedule Successfully")</script>
+        <script>
+            swal({
+                title: "Success",
+                text: "Appointment Reschedule Successfully",
+                type: "success",
+                timer: 1500,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+        </script>
     }
     if (ViewBag.statusupdate == false)
     {
-        <script>alert("Appointment Reschedule Failed")</script>
+        <script>
+            swal({
+                title: "Failed",
+                text: "Appointment Reschedulation Failed",
+                type: "error",
+                timer: 1500,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+        </script>
     }
 }
 @{
     if (ViewBag.statusdelete == true)
     {
-        <script>alert("Appointment Cancelled Successfully")</script>
+        <script>
+            swal({
+                title: "Success",
+                text: "Appointment Cancelled Successfully",
+                type: "success",
+                timer: 1500,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+        </script>
     }
     if (ViewBag.statusdelete == false)
     {
-        <script>alert("Appointment Cancelation Failed")</script>
+        <script>
+            swal({
+                title: "Failed",
+                text: "Appointment Cancellation Failed",
+                type: "error",
+                timer: 1500,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+        </script>
     }
 }
 <link rel="stylesheet" href="~/css/formDesign.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/tableSite.css" asp-append-version="true" />
 <div class="container p-3">
-    <br />
-    <h1>Your Appointments</h1>
-    <hr />
-    <div class="container">
-        <div class="form-group">
-            <div class="form-outline">
-                <div class="search-flex">
-                    <div class="sitem s2"></div>
-                    <div class="sitem s1">
-                        <input class="form-control" id="myfilter" type="search" placeholder="Search" aria-label="Search" onkeyup="search()">
-                        @*<label class="form-label"><span class="material-icons">search</span></label>*@
-                    </div>
+    <div class="search-item">
+        <div class="search-flex">
+            <div class="sitem s2">
+                <div class="headline1">
+                    <h1>Your Appointments</h1>
                 </div>
             </div>
+            <div class="sitem s1">
+                <input class="form-control" id="myfilter" type="search" placeholder="Search" aria-label="Search" onkeyup="search()">
+                @*<label class="form-label"><span class="material-icons">search</span></label>*@
+            </div>
         </div>
-        <br />
+    </div>
+    <div class="container">
         <table class="table table-hover" id="mytable">
             <thead>
-                <tr class="bg-dark text-white">
+                <tr>
                     <th>Name</th>
                     <th>Date</th>
                     <th>Time</th>
@@ -259,7 +295,14 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     url: '/Appointment/deleteAppointment/',
                     data: { "appointmentID": id },
                     success: function() {
-                        alert("Appointment Cancelled Successfully");
+                        swal({
+                            title: "Success",
+                            text: "Appointment Cancelled Successfully",
+                            type: "success",
+                            timer: 3000,
+                            showCancelButton: false,
+                            showConfirmButton: false
+                        });
                         window.location = "/Appointment/showAppointment";
                     }
                 })
@@ -268,33 +311,6 @@ For more information on enabling MVC for empty projects, visit https://go.micros
     });
 </script>
 <style>
-    /*.form-outline {
-                position: relative;
-            }
-
-            .form-label {
-                position: absolute;
-                top: 0.3rem;
-                left: 0.6rem;
-                padding-left: 0.3rem;
-                cursor: text;
-            }
-
-            #custom:focus ~ .form-label,
-            #custom:not(:placeholder-shown)#custom:not(:focus) ~ .form-label {
-                top: -0.8rem;
-                left: 0.5rem;
-                font-size: 13px;
-                background: white;
-            }
-
-            input[type="file"] ~ .form-label {
-                top: -0.8rem;
-                left: 0.5rem;
-                font-size: 13px;
-                background: white;
-            }*/
-
     span {
         font-size: 13.5px;
     }
