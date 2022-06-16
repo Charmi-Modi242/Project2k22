@@ -32,7 +32,23 @@ namespace physioCard.Repositories
 
         }
 
-
+        public async Task<int> getPatientCount(int did)
+        {
+            try
+            {
+                string sql = "select count(*) from patientTB where datepart(MM, registerdate) = datepart(MM, getDate()) AND docID = @id;";
+                var param = new DynamicParameters();
+                param.Add("id", did, DbType.Int32);
+                using (var connection = CreateConnection())
+                {
+                    return (await connection.QueryFirstOrDefaultAsync<int>(sql, param));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         public async Task<int> addpatientAsync(Patient patient)
         {
@@ -54,8 +70,6 @@ namespace physioCard.Repositories
                 param.Add("docID", patient.docid, DbType.Int32);
                 param.Add("clinicID", patient.clinicid, DbType.Int32);
 
-
-
                 using (var connection = CreateConnection())
                 {
                     return (await connection.ExecuteAsync(sql, param));
@@ -66,8 +80,6 @@ namespace physioCard.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
-
 
         public async Task<List<Patient>> getallpatientAsync(int id)
         {
@@ -86,8 +98,6 @@ namespace physioCard.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
-
 
         public async Task<Patient> getpatientAsync(int id)
         {
@@ -109,8 +119,6 @@ namespace physioCard.Repositories
             }
         }
 
-
-
         public async Task<int> editpatientAsync(Patient patient)
         {
             try
@@ -131,14 +139,10 @@ namespace physioCard.Repositories
                 param.Add("photo", patient.photo, DbType.String);
                 param.Add("clinicID", patient.clinicid, DbType.Int32);
 
-
-
                 using (var connection = CreateConnection())
                 {
                     return (await connection.ExecuteAsync(sql, param));
                 }
-
-
 
             }
             catch (Exception ex)
@@ -146,8 +150,6 @@ namespace physioCard.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
-
 
         public async Task<List<Patient>> getpatientbynameAsync(int did, string fname, string lname)
         {

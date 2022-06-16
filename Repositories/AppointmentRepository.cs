@@ -10,6 +10,80 @@ namespace physioCard.Repositories
         {
         }
 
+        public async Task<List<revenueModel>> getYearlyRevenue(int did)
+        {
+            try
+            {
+                string sql = "select DATEPART(MM, date_start) as monthID, sum(cost) as revenue FROM appointmentTB where doctorID=@did AND date_start > DATEADD(m, -11, (DATEADD(MM, DATEDIFF(mm, 0, GETDATE()), 0))) group by DATEPART(MM, date_start);";
+                var param = new DynamicParameters();
+                param.Add("did", did, DbType.Int32);
+                using (var connection = CreateConnection())
+                {
+                    return (await connection.QueryAsync<revenueModel>(sql, param)).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Appointment>> getMonthlyAppointment(int did, DateTime mdate)
+        {
+            try
+            {
+                string sql = "select a.appointmentID, a.patientID, a.doctorID, a.date_start, a.starttime, a.sessiontime, a.attendance_status, p.fname, p.lname, c.name from appointmentTB a, patientTB p, clinicTB c where doctorID=@did AND DATEPART(MM, date_start) = DATEPART(MM, @tdate) AND DATEPART(YYYY, date_start) = DATEPART(YYYY, @tdate) AND (a.attendance_status = @status OR a.attendance_status IS NULL) AND a.patientID=p.patientID AND p.clinicID=c.clinicID order by starttime;";
+                var param = new DynamicParameters();
+                param.Add("did", did, DbType.Int32);
+                param.Add("tdate", mdate, DbType.Date);
+                param.Add("status", false, DbType.Boolean);
+                using (var connection = CreateConnection())
+                {
+                    return (await connection.QueryAsync<Appointment>(sql, param)).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<int> getAppointmentCount(int did)
+        {
+            try
+            {
+                string sql = "select count(*) from appointmentTB where datepart(MM, date_start) = datepart(MM, getDate()) AND doctorID = @id;";
+                var param = new DynamicParameters();
+                param.Add("id", did, DbType.Int32);
+                using (var connection = CreateConnection())
+                {
+                    return (await connection.QueryFirstOrDefaultAsync<int>(sql, param));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<int> getRevenueCount(int did)
+        {
+            try
+            {
+                string sql = "select sum(cost) from appointmentTB where datepart(MM, date_start) = datepart(MM, getDate()) AND doctorID = @id;";
+                var param = new DynamicParameters();
+                param.Add("id", did, DbType.Int32);
+                using (var connection = CreateConnection())
+                {
+                    return (await connection.QueryFirstOrDefaultAsync<int>(sql, param));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<Patient>> getPatientNameAsync(int did)
         {
             try
@@ -46,6 +120,7 @@ namespace physioCard.Repositories
                 param.Add("time", appointment.starttime, DbType.Time);
                 param.Add("session_time", appointment.sessiontime, DbType.Time);
                 param.Add("cost", appointment.cost, DbType.Currency);
+                //param.Add("status", false, DbType.Boolean);
 
                 using (var connection = CreateConnection())
                 {
@@ -72,10 +147,11 @@ namespace physioCard.Repositories
             {
                 DateTime date = DateTime.Now;
                 string datestr = date.ToString("dd-MM-yyyy");
-                string sql = "select a.appointmentID, a.patientID, a.doctorID, a.date_start, a.starttime, a.sessiontime, a.attendance_status, p.fname, p.lname, c.name from appointmentTB a, patientTB p, clinicTB c where a.patientID=p.patientID and p.clinicID=c.clinicID and a.doctorID=@did and a.date_start>=@date order by a.date_start, a.starttime";
+                string sql = "select a.appointmentID, a.patientID, a.doctorID, a.date_start, a.starttime, a.sessiontime, a.attendance_status, p.fname, p.lname, c.name from appointmentTB a, patientTB p, clinicTB c where a.patientID=p.patientID and p.clinicID=c.clinicID and a.doctorID=@did and a.date_start>=@date and DATEPART(MM, date_start) = DATEPART(MM, GETDATE()) AND (a.attendance_status = @status OR a.attendance_status IS NULL) order by a.date_start, a.starttime";
                 var param = new DynamicParameters();
                 param.Add("did", did, DbType.Int32);
                 param.Add("date", datestr, DbType.Date);
+                param.Add("status", false, DbType.Boolean);
                 using (var connection = CreateConnection())
                 {
                     return (await connection.QueryAsync<Appointment>(sql, param)).ToList();
@@ -135,21 +211,21 @@ namespace physioCard.Repositories
             }
         }
 
-        public async Task<List<Appointment>> getAppointmentsAsync()
-        {
-            try
-            {
-                string sql = "select * from appointmentTB";
-                using (var connnection = CreateConnection())
-                {
-                    return (await connnection.QueryAsync<Appointment>(sql)).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        //public async Task<List<Appointment>> getAppointmentsAsync()
+        //{
+        //    try
+        //    {
+        //        string sql = "select * from appointmentTB";
+        //        using (var connnection = CreateConnection())
+        //        {
+        //            return (await connnection.QueryAsync<Appointment>(sql)).ToList();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //}
 
         public async Task<bool> deleteAppointmentAsync(int appointmentID)
         {

@@ -50,6 +50,18 @@ td, th {
     width: 350px;
 }
 
+.btn-nav {
+    background: #0b5788;
+    font-size: 1.5rem;
+    color: #fff;
+    padding: 0 1.2rem 0 1rem;
+}
+
+.btn-nav:hover {
+    color: #fff;
+    background: #063655;
+}
+
 @media(max-width: 768px) {
 
     .search-flex {
@@ -101,6 +113,10 @@ td, th {
         white-space: nowrap;
     }
 
+    .btn-nav {
+        margin: 10px 0;
+    }
+
     /*dd {
         display: inline;
         margin-right: 5px;
@@ -118,6 +134,11 @@ td, th {
     table, #myfilter {
         width: 300px;
         margin: 0 20px;
+    }
+
+    .btn-nav {
+        font-size: 1rem;
+        padding: 0 1rem 0 0.8rem;
     }
 }
 

@@ -176,16 +176,41 @@ namespace physioCard.Controllers
         public async Task<IActionResult> showAppointment()
         {
             int did = (int)HttpContext.Session.GetInt32("docID");
+            ViewBag.did = did;
             ViewBag.data = await _dashBoardController.getProfileAsync(did);
             List<Appointment> appointments = await _appointmentService.getAllAppointments(did);
             foreach (var item in appointments)
             {
                 item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
             }
-            //Appointment appointment = null;
-            //var tupleTwoModels = new Tuple<List<Appointment>, Appointment>(appointments, appointment);
             ViewBag.appointments = appointments;
             return View();
+        }
+
+        public async Task<IActionResult> getCurrMonthAppointment()
+        {
+            int did = (int)HttpContext.Session.GetInt32("docID");
+            List<Appointment> appointments = await _appointmentService.getAllAppointments(did);
+            foreach (var item in appointments)
+            {
+                item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
+            }
+            return Json(appointments);
+            //Appointment appointment = null;
+            //var tupleTwoModels = new Tuple<List<Appointment>, Appointment>(appointments, appointment);
+            //ViewBag.appointments = appointments;
+            //return View();
+        }
+
+        public async Task<IActionResult> getMonthlyAppointments(DateTime mDate)
+        {
+            int did = (int)HttpContext.Session.GetInt32("docID");
+            List<Appointment> appointments = await _appointmentService.getMonthlyAppointment(did, mDate);
+            foreach (var item in appointments)
+            {
+                item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
+            }
+            return Json(appointments);
         }
 
         //public async Task<IActionResult> showAppointment(bool sdelete)

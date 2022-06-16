@@ -5,6 +5,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 @{
+    ViewData["Title"] = "Show Appointment";
     if (ViewBag.statusupdate == true)
     {
         <script>
@@ -76,6 +77,14 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             </div>
         </div>
     </div>
+
+    <div class="navigate">
+        <div align="right">
+            <a class="btn btn-nav" id="prev" data-id="@ViewBag.did" align="center"> < </a>
+            <a class="btn btn-nav" id="next" data-id="@ViewBag.did" align="center"> > </a>
+        </div>
+    </div>
+
     <div class="container">
         <table class="table table-hover" id="mytable">
             <thead>
@@ -87,12 +96,14 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            @*<tbody id="setAppointments">
+            </tbody>*@
+            <tbody id="setAppointments">
                 @foreach (var item in ViewBag.appointments)
                 {
                     <tr>
                         <td data-label="Name">@item.fname @item.lname</td>
-                        <td data-label="Date">@item.date_start.ToString("dd-MM-yyyy")</td>
+                        <td data-label="Date">@item.date_start.ToString("dd MMM yyyy")</td>
                         <td data-label="Time">@item.starttime.ToString("HH:mm") - @item.endtime.ToString("HH:mm")</td>
                         <td data-label="Clinic">@item.name</td>
                         <td data-label="Operations">
@@ -229,11 +240,40 @@ For more information on enabling MVC for empty projects, visit https://go.micros
     // }
     // })
     //}
+</script>
+<script>
+
+    function monthDiff(dateFrom, dateTo) {
+        return dateTo.getMonth() - dateFrom.getMonth() +
+            (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
+    }
 
     $(document).ready(function() {
+        var currDate = new Date();
+        var dt = new Date();
+        //alert(dt);
+        //$.ajax({
+        //    type: 'POST',
+        //    url: '/Appointment/getCurrMonthAppointment/',
+        //    success: function(response) {
+        //        var tbl = document.getElementById('mytable').getElementsByTagName('tbody')[0];
+        //        for (var i = 0; i < response.length; i++) {
+        //            var d = new Date(response[i].date_start);
+        //            var st = new Date(response[i].starttime);
+        //            var et = new Date(response[i].endtime);
+        //            tbl.insertRow().innerHTML = '<td data-label="Name">' + response[i].fname + ' ' + response[i].lname + '</td>' +
+        //                '<td data-label="Date">' + d.getDate() + ' ' + d.toLocaleString('default', { month: 'short' }) + ' ' + d.getFullYear() + '</td>' +
+        //                '<td data-label="Time">' + st.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '-' + et.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '</td>' +
+        //                '<td data-label="Clinic">' + response[i].name + '</td>' +
+        //                '<td data-label="Operations">' +
+        //                '<a href="#" class="edit" data-bs-toggle="modal" data-bs-target="#reschedule" data-id="' + response[i].appointmentID + '">Reschedule</a> |' +
+        //                '<a href="#" data-id="' + response[i].appointmentID + '" title="Cancel Appointment" class="delete" data-bs-toggle="modal" data-bs-target="#delete">Cancel</a>' +
+        //                '</td>';
+        //            //$("#setAppointments").append(data);
+        //        }
         $('table .edit').on('click', function() {
             var id = $(this).data("id");
-
+            //console.log(id);
             $.ajax({
                 type: 'POST',
                 url: '/Appointment/getAppointmentByID/',
@@ -282,10 +322,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 }
             })
         });
-    });
-</script>
-<script>
-    $(document).ready(function() {
+
         $('table .delete').on('click', function() {
             var id = $(this).data("id");
             //console.log(id);
@@ -307,6 +344,411 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     }
                 })
             });
+        });
+
+        $('#prev').on('click', function() {
+            //var id = $(this).data("id");
+            dt.setMonth(dt.getMonth() - 1);
+            if (monthDiff(dt, currDate) == 0) {
+                //alert(dt);
+                $.ajax({
+                    type: 'POST',
+                    url: '/Appointment/getCurrMonthAppointment/',
+                    success: function(response) {
+                        var tbl = document.getElementById('mytable').getElementsByTagName('tbody')[0];
+                        tbl.innerHTML = " "
+                        for (var i = 0; i < response.length; i++) {
+                            var d = new Date(response[i].date_start);
+                            var st = new Date(response[i].starttime);
+                            var et = new Date(response[i].endtime);
+                            tbl.insertRow().innerHTML = '<td data-label="Name">' + response[i].fname + ' ' + response[i].lname + '</td>' +
+                                '<td data-label="Date">' + d.getDate() + ' ' + d.toLocaleString('default', { month: 'short' }) + ' ' + d.getFullYear() + '</td>' +
+                                '<td data-label="Time">' + st.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '-' + et.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '</td>' +
+                                '<td data-label="Clinic">' + response[i].name + '</td>' +
+                                '<td data-label="Operations">' +
+                                '<a href="#" class="edit" data-bs-toggle="modal" data-bs-target="#reschedule" data-id="' + response[i].appointmentID + '">Reschedule</a> |' +
+                                '<a href="#" data-id="' + response[i].appointmentID + '" title="Cancel Appointment" class="delete" data-bs-toggle="modal" data-bs-target="#delete">Cancel</a>' +
+                                '</td>';
+                            //$("#setAppointments").append(data);
+                        }
+                        $('table .edit').on('click', function() {
+                            var id = $(this).data("id");
+                            //console.log(id);
+                            $.ajax({
+                                type: 'POST',
+                                url: '/Appointment/getAppointmentByID/',
+                                data: { "appointmentID": id },
+                                success: function(response) {
+
+                                    //console.log(response.appointmentID);
+
+                                    //$('#reschedule #id').val(response.appointmentID);
+                                    //$('#reschedule #date').val(response.date_start);
+                                    //$('#reschedule #time').val(response.starttime);
+                                    //$('#reschedule #sessiontime').val(response.sessiontime);
+                                    //$('#reschedule #cost').val(response.cost);
+
+                                    //$('#reschedule #id').val(response.appointmentID);
+                                    //$('#reschedule #cost').val(response.cost);
+
+                                    var tempid = JSON.stringify(response.appointmentID);
+                                    //console.log(tempid);
+                                    document.getElementById("id").value = tempid;
+
+                                    var temppid = JSON.stringify(response.patientID);
+                                    document.getElementById("patientID").value = temppid;
+
+                                    var tempdid = JSON.stringify(response.doctorID);
+                                    document.getElementById("doctorID").value = tempdid;
+
+                                    //console.log(response.date_start);
+                                    var tempdate = JSON.stringify(response.date_start);
+                                    //console.log(tempdate.substring(1,11));
+                                    document.getElementById("date").value = tempdate.substring(1, 11);
+
+                                    var tempstarttime = JSON.stringify(response.starttime);
+                                    //console.log(response.starttime);
+                                    //console.log(tempstarttime.substring(12,20));
+                                    document.getElementById("time").value = tempstarttime.substring(12, 20);
+
+                                    var tempsessiontime = JSON.stringify(response.sessiontime);
+                                    //console.log(tempsessiontime.substring(12,17));
+                                    document.getElementById("sessiontime").value = tempsessiontime.substring(12, 17);
+
+                                    var tempcost = JSON.stringify(response.cost);
+                                    //console.log(tempid);
+                                    document.getElementById("cost").value = tempcost;
+
+                                }
+                            })
+                        });
+
+                        $('table .delete').on('click', function() {
+                            var id = $(this).data("id");
+                            //console.log(id);
+                            $('#del').on('click', function() {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/Appointment/deleteAppointment/',
+                                    data: { "appointmentID": id },
+                                    success: function() {
+                                        swal({
+                                            title: "Success",
+                                            text: "Appointment Cancelled Successfully",
+                                            type: "success",
+                                            timer: 3000,
+                                            showCancelButton: false,
+                                            showConfirmButton: false
+                                        });
+                                        window.location = "/Appointment/showAppointment";
+                                    }
+                                })
+                            });
+                        });
+                    }
+                });
+            } else {
+                //alert(dt + " " + id);
+                $.ajax({
+                    type: 'POST',
+                    url: '/Appointment/getMonthlyAppointments/',
+                    data: { "mDate": dt.toDateString() },
+                    success: function(response) {
+                        var tbl = document.getElementById('mytable').getElementsByTagName('tbody')[0];
+                        tbl.innerHTML = " ";
+                        for (var i = 0; i < response.length; i++) {
+                            var d = new Date(response[i].date_start);
+                            var st = new Date(response[i].starttime);
+                            var et = new Date(response[i].endtime);
+                            tbl.insertRow().innerHTML = '<td data-label="Name">' + response[i].fname + ' ' + response[i].lname + '</td>' +
+                                '<td data-label="Date">' + d.getDate() + ' ' + d.toLocaleString('default', { month: 'short' }) + ' ' + d.getFullYear() + '</td>' +
+                                '<td data-label="Time">' + st.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '-' + et.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '</td>' +
+                                '<td data-label="Clinic">' + response[i].name + '</td>' +
+                                '<td data-label="Operations">' +
+                                '<a href="#" class="edit" data-bs-toggle="modal" data-bs-target="#reschedule" data-id="' + response[i].appointmentID + '">Reschedule</a> |' +
+                                '<a href="#" data-id="' + response[i].appointmentID + '" title="Cancel Appointment" class="delete" data-bs-toggle="modal" data-bs-target="#delete">Cancel</a>' +
+                                '</td>';
+                            //$("#setAppointments").append(data);
+                        }
+                        $('table .edit').on('click', function() {
+                            var id = $(this).data("id");
+                            //console.log(id);
+                            $.ajax({
+                                type: 'POST',
+                                url: '/Appointment/getAppointmentByID/',
+                                data: { "appointmentID": id },
+                                success: function(response) {
+
+                                    //console.log(response.appointmentID);
+
+                                    //$('#reschedule #id').val(response.appointmentID);
+                                    //$('#reschedule #date').val(response.date_start);
+                                    //$('#reschedule #time').val(response.starttime);
+                                    //$('#reschedule #sessiontime').val(response.sessiontime);
+                                    //$('#reschedule #cost').val(response.cost);
+
+                                    //$('#reschedule #id').val(response.appointmentID);
+                                    //$('#reschedule #cost').val(response.cost);
+
+                                    var tempid = JSON.stringify(response.appointmentID);
+                                    //console.log(tempid);
+                                    document.getElementById("id").value = tempid;
+
+                                    var temppid = JSON.stringify(response.patientID);
+                                    document.getElementById("patientID").value = temppid;
+
+                                    var tempdid = JSON.stringify(response.doctorID);
+                                    document.getElementById("doctorID").value = tempdid;
+
+                                    //console.log(response.date_start);
+                                    var tempdate = JSON.stringify(response.date_start);
+                                    //console.log(tempdate.substring(1,11));
+                                    document.getElementById("date").value = tempdate.substring(1, 11);
+
+                                    var tempstarttime = JSON.stringify(response.starttime);
+                                    //console.log(response.starttime);
+                                    //console.log(tempstarttime.substring(12,20));
+                                    document.getElementById("time").value = tempstarttime.substring(12, 20);
+
+                                    var tempsessiontime = JSON.stringify(response.sessiontime);
+                                    //console.log(tempsessiontime.substring(12,17));
+                                    document.getElementById("sessiontime").value = tempsessiontime.substring(12, 17);
+
+                                    var tempcost = JSON.stringify(response.cost);
+                                    //console.log(tempid);
+                                    document.getElementById("cost").value = tempcost;
+
+                                }
+                            })
+                        });
+
+                        $('table .delete').on('click', function() {
+                            var id = $(this).data("id");
+                            //console.log(id);
+                            $('#del').on('click', function() {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/Appointment/deleteAppointment/',
+                                    data: { "appointmentID": id },
+                                    success: function() {
+                                        swal({
+                                            title: "Success",
+                                            text: "Appointment Cancelled Successfully",
+                                            type: "success",
+                                            timer: 3000,
+                                            showCancelButton: false,
+                                            showConfirmButton: false
+                                        });
+                                        window.location = "/Appointment/showAppointment";
+                                    }
+                                })
+                            });
+                        });
+                    }
+                });
+            }
+        });
+
+        $('#next').on('click', function() {
+            dt.setMonth(dt.getMonth() + 1);
+            //alert(dt);
+            if (monthDiff(dt, currDate) == 0) {
+                //alert(dt);
+                $.ajax({
+                    type: 'POST',
+                    url: '/Appointment/getCurrMonthAppointment/',
+                    success: function(response) {
+                        var tbl = document.getElementById('mytable').getElementsByTagName('tbody')[0];
+                        tbl.innerHTML = " "
+                        for (var i = 0; i < response.length; i++) {
+                            var d = new Date(response[i].date_start);
+                            var st = new Date(response[i].starttime);
+                            var et = new Date(response[i].endtime);
+                            tbl.insertRow().innerHTML = '<td data-label="Name">' + response[i].fname + ' ' + response[i].lname + '</td>' +
+                                '<td data-label="Date">' + d.getDate() + ' ' + d.toLocaleString('default', { month: 'short' }) + ' ' + d.getFullYear() + '</td>' +
+                                '<td data-label="Time">' + st.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '-' + et.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '</td>' +
+                                '<td data-label="Clinic">' + response[i].name + '</td>' +
+                                '<td data-label="Operations">' +
+                                '<a href="#" class="edit" data-bs-toggle="modal" data-bs-target="#reschedule" data-id="' + response[i].appointmentID + '">Reschedule</a> |' +
+                                '<a href="#" data-id="' + response[i].appointmentID + '" title="Cancel Appointment" class="delete" data-bs-toggle="modal" data-bs-target="#delete">Cancel</a>' +
+                                '</td>';
+                            //$("#setAppointments").append(data);
+                        }
+                        $('table .edit').on('click', function() {
+                            var id = $(this).data("id");
+                            //console.log(id);
+                            $.ajax({
+                                type: 'POST',
+                                url: '/Appointment/getAppointmentByID/',
+                                data: { "appointmentID": id },
+                                success: function(response) {
+
+                                    //console.log(response.appointmentID);
+
+                                    //$('#reschedule #id').val(response.appointmentID);
+                                    //$('#reschedule #date').val(response.date_start);
+                                    //$('#reschedule #time').val(response.starttime);
+                                    //$('#reschedule #sessiontime').val(response.sessiontime);
+                                    //$('#reschedule #cost').val(response.cost);
+
+                                    //$('#reschedule #id').val(response.appointmentID);
+                                    //$('#reschedule #cost').val(response.cost);
+
+                                    var tempid = JSON.stringify(response.appointmentID);
+                                    //console.log(tempid);
+                                    document.getElementById("id").value = tempid;
+
+                                    var temppid = JSON.stringify(response.patientID);
+                                    document.getElementById("patientID").value = temppid;
+
+                                    var tempdid = JSON.stringify(response.doctorID);
+                                    document.getElementById("doctorID").value = tempdid;
+
+                                    //console.log(response.date_start);
+                                    var tempdate = JSON.stringify(response.date_start);
+                                    //console.log(tempdate.substring(1,11));
+                                    document.getElementById("date").value = tempdate.substring(1, 11);
+
+                                    var tempstarttime = JSON.stringify(response.starttime);
+                                    //console.log(response.starttime);
+                                    //console.log(tempstarttime.substring(12,20));
+                                    document.getElementById("time").value = tempstarttime.substring(12, 20);
+
+                                    var tempsessiontime = JSON.stringify(response.sessiontime);
+                                    //console.log(tempsessiontime.substring(12,17));
+                                    document.getElementById("sessiontime").value = tempsessiontime.substring(12, 17);
+
+                                    var tempcost = JSON.stringify(response.cost);
+                                    //console.log(tempid);
+                                    document.getElementById("cost").value = tempcost;
+
+                                }
+                            })
+                        });
+
+                        $('table .delete').on('click', function() {
+                            var id = $(this).data("id");
+                            //console.log(id);
+                            $('#del').on('click', function() {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/Appointment/deleteAppointment/',
+                                    data: { "appointmentID": id },
+                                    success: function() {
+                                        swal({
+                                            title: "Success",
+                                            text: "Appointment Cancelled Successfully",
+                                            type: "success",
+                                            timer: 3000,
+                                            showCancelButton: false,
+                                            showConfirmButton: false
+                                        });
+                                        window.location = "/Appointment/showAppointment";
+                                    }
+                                })
+                            });
+                        });
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Appointment/getMonthlyAppointments/',
+                    data: { "mDate": dt.toDateString() },
+                    success: function(response) {
+                        var tbl = document.getElementById('mytable').getElementsByTagName('tbody')[0];
+                        tbl.innerHTML = " ";
+                        for (var i = 0; i < response.length; i++) {
+                            var d = new Date(response[i].date_start);
+                            var st = new Date(response[i].starttime);
+                            var et = new Date(response[i].endtime);
+                            tbl.insertRow().innerHTML = '<td data-label="Name">' + response[i].fname + ' ' + response[i].lname + '</td>' +
+                                '<td data-label="Date">' + d.getDate() + ' ' + d.toLocaleString('default', { month: 'short' }) + ' ' + d.getFullYear() + '</td>' +
+                                '<td data-label="Time">' + st.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '-' + et.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '</td>' +
+                                '<td data-label="Clinic">' + response[i].name + '</td>' +
+                                '<td data-label="Operations">' +
+                                '<a href="#" class="edit" data-bs-toggle="modal" data-bs-target="#reschedule" data-id="' + response[i].appointmentID + '">Reschedule</a> |' +
+                                '<a href="#" data-id="' + response[i].appointmentID + '" title="Cancel Appointment" class="delete" data-bs-toggle="modal" data-bs-target="#delete">Cancel</a>' +
+                                '</td>';
+                            //$("#setAppointments").append(data);
+                        }
+                        $('table .edit').on('click', function() {
+                            var id = $(this).data("id");
+                            //console.log(id);
+                            $.ajax({
+                                type: 'POST',
+                                url: '/Appointment/getAppointmentByID/',
+                                data: { "appointmentID": id },
+                                success: function(response) {
+
+                                    //console.log(response.appointmentID);
+
+                                    //$('#reschedule #id').val(response.appointmentID);
+                                    //$('#reschedule #date').val(response.date_start);
+                                    //$('#reschedule #time').val(response.starttime);
+                                    //$('#reschedule #sessiontime').val(response.sessiontime);
+                                    //$('#reschedule #cost').val(response.cost);
+
+                                    //$('#reschedule #id').val(response.appointmentID);
+                                    //$('#reschedule #cost').val(response.cost);
+
+                                    var tempid = JSON.stringify(response.appointmentID);
+                                    //console.log(tempid);
+                                    document.getElementById("id").value = tempid;
+
+                                    var temppid = JSON.stringify(response.patientID);
+                                    document.getElementById("patientID").value = temppid;
+
+                                    var tempdid = JSON.stringify(response.doctorID);
+                                    document.getElementById("doctorID").value = tempdid;
+
+                                    //console.log(response.date_start);
+                                    var tempdate = JSON.stringify(response.date_start);
+                                    //console.log(tempdate.substring(1,11));
+                                    document.getElementById("date").value = tempdate.substring(1, 11);
+
+                                    var tempstarttime = JSON.stringify(response.starttime);
+                                    //console.log(response.starttime);
+                                    //console.log(tempstarttime.substring(12,20));
+                                    document.getElementById("time").value = tempstarttime.substring(12, 20);
+
+                                    var tempsessiontime = JSON.stringify(response.sessiontime);
+                                    //console.log(tempsessiontime.substring(12,17));
+                                    document.getElementById("sessiontime").value = tempsessiontime.substring(12, 17);
+
+                                    var tempcost = JSON.stringify(response.cost);
+                                    //console.log(tempid);
+                                    document.getElementById("cost").value = tempcost;
+
+                                }
+                            })
+                        });
+
+                        $('table .delete').on('click', function() {
+                            var id = $(this).data("id");
+                            //console.log(id);
+                            $('#del').on('click', function() {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/Appointment/deleteAppointment/',
+                                    data: { "appointmentID": id },
+                                    success: function() {
+                                        swal({
+                                            title: "Success",
+                                            text: "Appointment Cancelled Successfully",
+                                            type: "success",
+                                            timer: 3000,
+                                            showCancelButton: false,
+                                            showConfirmButton: false
+                                        });
+                                        window.location = "/Appointment/showAppointment";
+                                    }
+                                })
+                            });
+                        });
+                    }
+                });
+            }
         });
     });
 </script>

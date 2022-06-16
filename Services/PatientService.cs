@@ -14,6 +14,10 @@ namespace physioCard.Services
         {
             return await (_patientRepository.getdocnameAsync(did));
         }
+        public async Task<int> getPatientCount(int did)
+        {
+            return await _patientRepository.getPatientCount(did);
+        }
         public async Task<int> addpatient(Patient patient)
         {
             return await (_patientRepository.addpatientAsync(patient));

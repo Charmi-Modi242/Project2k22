@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using physioCard.Domain;
 using physioCard.Services;
 
@@ -10,11 +11,17 @@ namespace physioCard.Controllers
     {
         private readonly IDoctorClinicService _doctorClinicService;
         private readonly IDoctorService _doctorService;
+        private readonly IAppointmentService _appointmentService;
+        private readonly IAttendanceService _attendanceService;
+        private readonly IPatientService _patientService;
 
-        public DashBoardController(IDoctorClinicService doctorClinicService, IDoctorService doctorService)
+        public DashBoardController(IDoctorClinicService doctorClinicService, IDoctorService doctorService, IAttendanceService attendanceService, IAppointmentService appointmentService, IPatientService patientService)
         {
             _doctorClinicService = doctorClinicService;
             _doctorService = doctorService;
+            _attendanceService = attendanceService;
+            _appointmentService = appointmentService;
+            _patientService = patientService;
         }
 
         public IActionResult Index()
@@ -43,6 +50,27 @@ namespace physioCard.Controllers
                 else
                 {
                     ViewBag.data = await getProfileAsync(did);
+                    List<Appointment> appointments = await _attendanceService.getTodaysAppointment(did);
+                    foreach (var item in appointments)
+                    {
+                        item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
+                    }
+                    ViewBag.appointment = appointments;
+                    List<Patient> patient = await _patientService.getallpatient(did);
+                    foreach (Patient item in patient)
+                    {
+                        if (item.medical_History == null)
+                        {
+                            item.medical_History = "None";
+                        }
+                        TimeSpan ts = DateTime.Now - item.dob;
+                        int age = (int)ts.TotalDays / 365;
+                        item.age = age;
+                    }
+                    ViewBag.patients = patient;
+                    ViewBag.patientCount = await _patientService.getPatientCount(did);
+                    ViewBag.appointmentCount = await _appointmentService.getAppointmentCount(did);
+                    ViewBag.revenueCount = await _appointmentService.getRevenueCount(did);
                     return View();
                 }
             }
@@ -53,6 +81,17 @@ namespace physioCard.Controllers
                 "See your system administrator.");
             }
             return View();
+        }
+        public async Task<IActionResult> getYearlyData()
+        {
+            int did = (int)HttpContext.Session.GetInt32("docID");
+            List<revenueModel> rm = await _appointmentService.getYearlyRevenue(did);
+            foreach (var item in rm)
+            {
+                DateTime d = new DateTime(2022, item.monthID, 1);
+                item.mName = d.ToString("MMM");
+            }
+            return Json(rm);
         }
 
         public async Task<string[]> getProfileAsync(int did)

@@ -42,10 +42,25 @@ namespace physioCard.Services
         {
             return _appointmentRepository.getClashedAppointmentsAsync(appointment);
         }
-
-        public Task<List<Appointment>> getAppointmentsAsync()
+        public async Task<List<Appointment>> getMonthlyAppointment(int did, DateTime mdate)
         {
-            return _appointmentRepository.getAppointmentsAsync();
+            return await _appointmentRepository.getMonthlyAppointment(did, mdate);
+        }
+        //public Task<List<Appointment>> getAppointmentsAsync()
+        //{
+        //    return _appointmentRepository.getAppointmentsAsync();
+        //}
+        public async Task<List<revenueModel>> getYearlyRevenue(int did)
+        {
+            return await _appointmentRepository.getYearlyRevenue(did);
+        }
+        public async Task<int> getAppointmentCount(int did)
+        {
+            return await _appointmentRepository.getAppointmentCount(did);
+        }
+        public async Task<int> getRevenueCount(int did)
+        {
+            return await _appointmentRepository.getRevenueCount(did);
         }
     }
 }

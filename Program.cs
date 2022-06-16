@@ -29,7 +29,10 @@ builder.Services.AddAuthentication("MyAuthenticatedCookie").AddCookie("MyAuthent
     options.ExpireTimeSpan = TimeSpan.FromDays(30);
 });
 
-builder.Services.AddSession(); /*for session*/
+/*for session*/
+builder.Services.AddSession(options => { 
+    options.IdleTimeout = TimeSpan.FromDays(30);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

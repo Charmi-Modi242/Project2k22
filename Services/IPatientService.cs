@@ -5,6 +5,7 @@ namespace physioCard.Services
     public interface IPatientService
     {
         public Task<string> getdocname(int did);
+        public Task<int> getPatientCount(int did);
         public Task<int> addpatient(Patient patient);
         public Task<List<Patient>> getallpatient(int id);
         public Task<Patient> getpatient(int id);

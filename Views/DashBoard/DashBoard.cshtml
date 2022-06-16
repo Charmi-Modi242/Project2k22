@@ -6,7 +6,268 @@
 }
 <link rel="stylesheet" href="~/css/homeSite.css" asp-append-version="true" />
 <div class="container">
-    <div class="page-header">
-        <h1>Analytics Dashboard</h1>
+    @*<div class="page-header">
+    <h1>Analytics Dashboard</h1>
+    </div>*@
+
+    <div>
+        <div class="cards">
+            <div class="card-single">
+                <div class="card-flex">
+                    <div class="card-info">
+                        <div class="card-head">
+                            <span>Patients</span>
+                            <small>Number of Patients</small>
+                        </div>
+
+                        <h2>@ViewBag.patientCount</h2>
+                        @*<small>2% less purchase</small>*@
+                    </div>
+                    <div class="card-chart">
+                        @*<i class='bx bx-user'></i>*@
+                        <i class='bx bxs-group'></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-single">
+                <div class="card-flex">
+                    <div class="card-info">
+                        <div class="card-head">
+                            <span>Appointments</span>
+                            <small>Number of Appointments</small>
+                        </div>
+
+                        <h2>@ViewBag.appointmentCount</h2>
+                        @*<small>2% less purchase</small>*@
+                    </div>
+                    <div class="card-chart">
+                        <i class='bx bx-calendar'></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-single">
+                <div class="card-flex">
+                    <div class="card-info">
+                        <div class="card-head">
+                            <span>Revenue</span>
+                            <small>Total Revenue</small>
+                        </div>
+
+                        <h2><i class='bx bx-rupee'></i>@ViewBag.revenueCount</h2>
+                        @*<small>2% less purchase</small>*@
+                    </div>
+                    <div class="card-chart">
+                        <i class='bx bx-rupee'></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="jobs-grid">*@
+
+        <div class="analytics-card card px-4 pt-2 pb-5">
+            <div class="card-headline"><h2>Revenue Chart</h2></div>
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <div class="jobs-grid">
+            <div class="jobs">
+                <div class="card p-3">
+                    <h2>
+                        Today's Appointments
+                        <a asp-controller="Appointment" asp-action="showAppointment">See all appointments >></a>
+                    </h2>
+                    <div class="tresponsive">
+                        <table width="100%">
+                            <tbody>
+                                @if (ViewBag.appointment.Count > 0)
+                                {
+                                    foreach (var item in ViewBag.appointment)
+                                    {
+                                        foreach (var item1 in ViewBag.patients)
+                                        {
+                                            if (item.patientID == item1.patientID)
+                                            {
+                                                <tr>
+                                                    @*<td><div><a href="~/@item1.photo"><img src="~/@item1.photo" style="border-radius : 50%; width: 50px; height: 50px;" /></a></div></td>*@
+                                                    <td><div>@item.fname @item.lname</div></td>
+                                                    @*<td>@item.date_start.ToString("dd-MM-yyyy")</td>*@
+                                                    <td><div>@item.starttime.ToString("HH:mm") - @item.endtime.ToString("HH:mm")</div></td>
+                                                    <td><div>@item.name</div></td>
+                                                    @*<td><div>@item1.age</div></td>*@
+                                                    @*<td><div>@item1.chief_complains</div></td>*@
+                                                    @*<td><div>@item1.medical_History</div></td>*@
+                                                    @{
+                                                        if (@item.attendance_status == true)
+                                                        {
+                                                            <td><div><div class="badge-light-success">Attended</div></div></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td><div><div class="badge-light-danger">Pending&nbsp;</div></div></td>
+                                                        }
+                                                    }
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>You don't have any appointments</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="jobs">
+                <div class="card p-3">
+                    <h2>
+                        Today's Patients
+                        @*<a asp-controller="Appointment" asp-action="showAppointment">See all appointments >></a>*@
+                    </h2>
+                    <div class="tresponsive">
+                        <table width="100%">
+                            <tbody>
+                                @if (ViewBag.appointment.Count > 0)
+                                {
+                                    foreach (var item in ViewBag.appointment)
+                                    {
+                                        foreach (var item1 in ViewBag.patients)
+                                        {
+                                            if (item.patientID == item1.patientID)
+                                            {
+                                                <tr>
+                                                    @*<td><div><a href="~/@item1.photo"><img src="~/@item1.photo" style="border-radius : 50%; width: 45px; height: 45px;" /></a></div></td>*@
+                                                    <td><div>@item.fname @item.lname</div></td>
+                                                    @*<td>@item.date_start.ToString("dd-MM-yyyy")</td>*@
+                                                    @*<td><div>@item.starttime.ToString("HH:mm") - @item.endtime.ToString("HH:mm")</div></td>*@
+                                                    @*<td><div>@item1.age</div></td>*@
+                                                    <td><div>@item1.chief_complains</div></td>
+                                                    <td><div>@item1.medical_History</div></td>
+                                                    @*<td><div>@item.attendance_status</div></td>*@
+                                                    <td><div><a asp-controller="Patient" asp-action="showPatientdetails" class="btn btn-show" asp-route-id="@item.patientID">Details</a></div></td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>You don't need to visit any patient today</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = [
+        '0',
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+    ];
+
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: 'rgb(11, 87, 136)',
+            borderColor: 'rgb(11, 87, 136)',
+            data: [0, 10, 5, 2, 20, 30, 45],
+        }]
+    };
+
+    const config = {
+        type: 'line',
+        data: data,
+        options: {}
+    };
+
+    var myChart = new Chart(
+        document.getElementById('myChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            datasets: [{
+                backgroundColor: 'rgba(255, 255, 255, 1)',
+                borderColor: 'rgba(11, 87, 136, 1)',
+                tension: 0.1,
+                fill: {
+                    target: 'origin',
+                    //above: 'rgb(11, 87, 136)',
+                    above: 'rgba(11, 87, 136, 0.2)',
+                    //below: 'rgb(11, 87, 136)'
+                }
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false,
+                    //position: 'bottom',
+                }
+            }
+        }
+    });
+
+    window.addEventListener("load", function() {
+        $.ajax({
+            type: 'POST',
+            url: '/DashBoard/getYearlyData/',
+            success: function(response) {
+
+                var currMonth = new Date().getMonth();
+                console.log(currMonth);
+
+                var obj = [];
+
+                for (var i = currMonth + 1; i < response.length; i++) {
+                    obj.push(response[i]);
+                }
+
+                for (var i = 0; i <= currMonth; i++) {
+                    obj.push(response[i]);
+                }
+                console.log(obj.length);
+
+                for (i = 0; i < obj.length; i++) {
+                    console.log(obj[i].mName + ' ' + obj[i].revenue);
+                }
+
+                var month = [];
+                for (var i = 0; i < obj.length; i++) {
+                    month[i] = obj[i].mName;
+                }
+                console.log(month);
+
+                var revenue = [];
+                for (var i = 0; i < obj.length; i++) {
+                    revenue[i] = obj[i].revenue;
+                }
+                console.log(revenue);
+
+                myChart.data.labels = month;
+                myChart.data.datasets[0].data = revenue;
+                myChart.update();
+            }
+        })
+        //myChart.data.labels = ['0', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        //myChart.data.datasets[0].data = [0, 10, 20, 30, 40, 50, 40, 20, 30, 10, 20, 70, 60];
+
+    });
+</script>

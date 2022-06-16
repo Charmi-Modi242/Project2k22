@@ -5,6 +5,7 @@ namespace physioCard.Repositories
     public interface IRepoPatient<T> where T : BaseEntity
     {
         Task<string> getdocnameAsync(int did);
+        Task<int> getPatientCount(int did);
         Task<int> addpatientAsync(Patient patient);
         Task<List<T>> getallpatientAsync(int id);
         Task<T> getpatientAsync(int id);
