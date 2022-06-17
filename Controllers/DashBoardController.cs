@@ -14,14 +14,16 @@ namespace physioCard.Controllers
         private readonly IAppointmentService _appointmentService;
         private readonly IAttendanceService _attendanceService;
         private readonly IPatientService _patientService;
+        private readonly IInvoiceService _invoiceService;
 
-        public DashBoardController(IDoctorClinicService doctorClinicService, IDoctorService doctorService, IAttendanceService attendanceService, IAppointmentService appointmentService, IPatientService patientService)
+        public DashBoardController(IDoctorClinicService doctorClinicService, IDoctorService doctorService, IAttendanceService attendanceService, IAppointmentService appointmentService, IPatientService patientService, IInvoiceService invoiceService)
         {
             _doctorClinicService = doctorClinicService;
             _doctorService = doctorService;
             _attendanceService = attendanceService;
             _appointmentService = appointmentService;
             _patientService = patientService;
+            _invoiceService = invoiceService;
         }
 
         public IActionResult Index()
@@ -70,7 +72,7 @@ namespace physioCard.Controllers
                     ViewBag.patients = patient;
                     ViewBag.patientCount = await _patientService.getPatientCount(did);
                     ViewBag.appointmentCount = await _appointmentService.getAppointmentCount(did);
-                    ViewBag.revenueCount = await _appointmentService.getRevenueCount(did);
+                    ViewBag.revenueCount = await _invoiceService.getRevenueCount(did);
                     return View();
                 }
             }
@@ -85,7 +87,7 @@ namespace physioCard.Controllers
         public async Task<IActionResult> getYearlyData()
         {
             int did = (int)HttpContext.Session.GetInt32("docID");
-            List<revenueModel> rm = await _appointmentService.getYearlyRevenue(did);
+            List<revenueModel> rm = await _invoiceService.getYearlyRevenue(did);
             foreach (var item in rm)
             {
                 DateTime d = new DateTime(2022, item.monthID, 1);

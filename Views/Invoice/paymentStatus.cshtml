@@ -1,0 +1,78 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link rel="stylesheet" href="~/css/tableSite.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/formDesign.css" asp-append-version="true" />
+<div class="container p-3">
+    <div class="search-item">
+        <div class="search-flex">
+            <div class="sitem s2">
+                <div class="headline1">
+                    <h1>Payment Status</h1>
+                </div>
+            </div>
+            <div class="sitem s1">
+                <a asp-action="seeAllPendingInvoice" asp-controller="Invoice" class="btn btn-primary">ALL PENDING INVOICES</a>
+                @*<label class="form-label"><span class="material-icons">search</span></label>*@
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <table class="table table-hover" id="mytable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Invoice No</th>
+                    <th>Invoice Generated On</th>
+                    <th>Appointments Included</th>
+                    <th>Amount</th>
+                    <th>Payment Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.invoice)
+                {
+                    <tr>
+                        <td>@item.fname @item.lname</td>
+                        <td>@item.invoiceNo</td>
+                        <td>@item.invoice_date</td>
+                        @if (item.istart_date == item.iend_date)
+                        {
+                            <td>@item.istart_date.ToString("dd-MM-yyyy")</td>
+                        }
+                        else
+                        {
+                            <td>@item.istart_date.ToString("dd-MM-yyyy") to @item.iend_date.ToString("dd-MM-yyy")</td>
+                        }
+                        <td>@item.gross_amount</td>
+                        <td>
+                            <div class="form-switch">
+                                <input type="checkbox" class="form-check-input payBtn" id="pay" data-id="@item.invoiceID" checked="@item.pay_status">
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('table .payBtn').on('click', function() {
+            var id = $(this).data("id");
+            var status = $(this).is(":checked");
+            //console.log(id);
+            //console.log($(this).is(":checked"));
+            $.ajax({
+                type: 'POST',
+                url: '/Invoice/payStatusEdit/',
+                data: { "status": status, "invoiceID": id }
+            })
+        });
+    }
+    );
+</script>

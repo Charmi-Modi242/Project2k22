@@ -16,9 +16,9 @@ namespace physioCard.Services
             return (await _clinicRepository.CreateClinicAsync(clinic));
         }
 
-        public async Task<List<Clinic>> GetAllAsync()
+        public async Task<List<Clinic>> GetAllAsync(int docID)
         {
-            return (await _clinicRepository.GetAllAsync());
+            return (await _clinicRepository.GetAllAsync(docID));
         }
 
         public async Task<Clinic> GetByClinicID(int cID)

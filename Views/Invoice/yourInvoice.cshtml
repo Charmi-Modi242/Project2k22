@@ -1,0 +1,133 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout1";
+}
+<div align="right">
+    <button style="border-radius: 8px; border: 1px solid gray; margin: 20px 10px;" onclick="printMe()" id="pbtn"><span class="material-icons">print</span></button>
+</div>
+<div class="container" id="outprint">
+    @*<link rel="stylesheet" href="~/css/pdfSite.css" asp-append-version="true" />*@
+    <div class="clinic" style="width: 100%; background: #0b5788; padding: 10px">
+        <table style="width: 100%; color: white;" id="myclinic">
+            <tr>
+                <td rowspan=5><img src="../@ViewBag.clinic.logo" style="border-radius : 50%; border: 1px solid #ddd; padding: 5px; width: 200px; height: 200px;" @*class="img-fluid"*@ /></td>
+                <td align="right"><h2>@ViewBag.clinic.name</h2></</td>
+            </tr>
+            <tr>
+                <td align="right">@ViewBag.clinic.address</td>
+            </tr>
+            <tr>
+                <td align="right">@ViewBag.clinic.contactno</td>
+            </tr>
+            <tr>
+                <td align="right">GST No.: @ViewBag.clinic.GSTno</td>
+            </tr>
+            <tr>
+                <td align="right"><h5>Treatment By Dr. @ViewBag.doctor.fname @ViewBag.doctor.lname</h5></td>
+            </tr>
+        </table>
+        @*<div class="c-flex">
+            <div class="citem1">
+            <img src="../@ViewBag.clinic.logo" style="border-radius : 50%; border: 1px solid #ddd; padding: 5px; width: 200px; height: 200px;" class="img-fluid"/>
+            </div>
+            <div class="citem2" id="myclinic">
+            <h2>@ViewBag.clinic.name</h2>
+            <p>@ViewBag.clinic.address</p>
+            <p>@ViewBag.clinic.contactno</p>
+            <p>GST No.: @ViewBag.clinic.GSTno</p>
+            Treatment By Dr. @ViewBag.doctor.fname @ViewBag.doctor.lname
+            </div>
+            </div>*@
+    </div>
+    <br />
+    <table style="width: 100%; color: #000;">
+        <tr>
+            <td align="left"><b>Name</b></td>
+            <td></td>
+            <td align="right"><b>Invoice No.</b></td>
+        </tr>
+        <tr>
+            <td align="left">@ViewBag.patient.fname @ViewBag.patient.lname</td>
+            <td></td>
+            <td align="right">@ViewBag.invoice.invoiceNo</td>
+        </tr>
+        <tr>
+            <td align="left"><b>Contact No.</b></td>
+            <td></td>
+            <td align="right"><b>Invoice Date</b></td>
+        </tr>
+        <tr>
+            <td align="left">@ViewBag.patient.contactno</td>
+            <td></td>
+            <td align="right">@ViewBag.invoice.invoice_date</td>
+        </tr>
+        <tr style="border-bottom : 1px solid black;">
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <div class="appointments">
+        <table class="table">
+            <tr">
+                <th>Date</th>
+                <th>Time</th>
+                <td align="right"><b>Amount</b></td>
+                </tr>
+                @foreach (var item in ViewBag.appointments)
+                {
+                <tr>
+                    <td>@item.date_start.ToString("dd-MM-yyyy")</td>
+                    <td>@item.starttime.ToString("HH:mm") - @item.endtime.ToString("HH:mm")</td>
+                    <td align="right">@item.cost.00</td>
+                </tr>
+                }
+                <tr style="border-bottom: 1px solid black; font-weight: 900;">
+                    <td colspan=3></td>
+                </tr>
+                <tr>
+                    <td>Total Amount</td>
+                    <td></td>
+                    <td align="right">@ViewBag.invoice.total_amount.00</td>
+                </tr>
+                <tr>
+                    <td>- Discount(%)</td>
+                    <td></td>
+                    <td align="right">@ViewBag.invoice.discount%</td>
+                </tr>
+                <tr>
+                    <td>- Tax(%)</td>
+                    <td></td>
+                    <td align="right">@ViewBag.invoice.tax%</td>
+                </tr>
+                <tr style=" font-weight: 900; font-size: 20px; border-top: 1px solid #000; border-bottom: 1px solid #000;">
+                    <td>Gross Amount</td>
+                    <td></td>
+                    <td align="right">@ViewBag.invoice.gross_amount</td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td align="right"><img src="../@ViewBag.clinic.head_signature" style="height: 100px;" @*class="img-fluid"*@ /></td>
+                </tr>
+        </table>
+    </div>
+</div>
+<div>
+    <a asp-controller="Invoice" asp-action="generateInvoice" style="text-decoration : none"> << Back </a>
+</div>
+<script>
+    function printMe()
+    {
+        var backup = document.body.innerHTML;
+        var divcontent = document.getElementById("outprint").innerHTML;
+        document.body.innerHTML=divcontent;
+        document.getElementById("myclinic").style.color = "#000";
+        window.print();
+        document.body.innerHTML=backup;
+    }
+</script>

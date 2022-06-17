@@ -27,9 +27,10 @@ namespace physioCard.Controllers
 
         public async Task<IActionResult> AddDoctorClinic()
         {
-            ViewBag.did = HttpContext.Session.GetInt32("docID");
+            int did = (int)HttpContext.Session.GetInt32("docID");
+            ViewBag.did = did;
             ViewBag.data = await _dashBoardController.getProfileAsync(ViewBag.did);
-            ViewBag.clinics = new MultiSelectList(await _clinicService.GetAllAsync(), "clinicID", "name");
+            ViewBag.clinics = new MultiSelectList(await _clinicService.GetAllAsync(did), "clinicID", "name");
             bool IsClinic = await _doctorClinicService.IsClinicAsync(ViewBag.did);
             ViewData["IsClinic"] = IsClinic;
             return View();
@@ -103,7 +104,8 @@ namespace physioCard.Controllers
                                              "Try Again, and if the problem persists" +
                                              "See you system administrator.");
             }
-            ViewBag.clinics = new MultiSelectList(await _clinicService.GetAllAsync(), "clinicID", "name");
+            int did = (int)HttpContext.Session.GetInt32("docID");
+            ViewBag.clinics = new MultiSelectList(await _clinicService.GetAllAsync(did), "clinicID", "name");
             return View();
         }
         public async Task<IActionResult> CreateClinic()

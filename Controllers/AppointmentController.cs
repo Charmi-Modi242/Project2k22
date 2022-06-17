@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using physioCard.Domain;
 using physioCard.Services;
+using physioCard.wwwroot.lib.Mail;
+using System.Collections;
 
 namespace physioCard.Controllers
 {
@@ -12,12 +14,14 @@ namespace physioCard.Controllers
         private readonly DashBoardController _dashBoardController;
         private readonly IAppointmentService _appointmentService;
         private readonly IPatientService _patientService;
+        private readonly IDoctorService _doctorService;
 
-        public AppointmentController(DashBoardController dashBoardController, IAppointmentService appointmentService, IPatientService patientService)
+        public AppointmentController(DashBoardController dashBoardController, IAppointmentService appointmentService, IPatientService patientService, IDoctorService doctorService)
         {
             _dashBoardController = dashBoardController;
             _appointmentService = appointmentService;
             _patientService = patientService;
+            _doctorService = doctorService;
         }
         public IActionResult Index()
         {
@@ -51,6 +55,7 @@ namespace physioCard.Controllers
                 appointment.doctorID = did;
                 appointment.cost = (int)appointment.cost;
                 string day = null;
+                ArrayList emaildate = new ArrayList();
                 if (ModelState.IsValid)
                 {
                     DateTime today = DateTime.Now.Date;
@@ -70,11 +75,13 @@ namespace physioCard.Controllers
                             }
                             else
                             {
-                                await _appointmentService.FixAppointment(appointment);
+                                string tdate = await _appointmentService.FixAppointment(appointment);
+                                emaildate.Add(tdate);
                             }
                         }
                         else
                         {
+
                             List<Appointment> clashed_appointments = new List<Appointment>();
                             cstatus = await _appointmentService.checkAppointmentClashes(appointment);
                             if (cstatus)
@@ -88,7 +95,8 @@ namespace physioCard.Controllers
                             }
                             else
                             {
-                                await _appointmentService.FixAppointment(appointment);
+                                string tdate = await _appointmentService.FixAppointment(appointment);
+                                emaildate.Add(tdate);
                             }
 
                             int days = (appointment.date_end - appointment.date_start).Days;
@@ -137,18 +145,33 @@ namespace physioCard.Controllers
                                             }
                                             else
                                             {
-                                                await _appointmentService.FixAppointment(appointment);
+                                                string tdate = await _appointmentService.FixAppointment(appointment);
+                                                emaildate.Add(tdate);
                                             }
                                         }
                                     }
                                 }
                             }
+
                             if (clashed_appointments.Count > 0)
                             {
+                                Patient p1 = await _patientService.getpatient(appointment.patientID);
+                                Doctor doc1 = await _doctorService.GetByIDAsync(did);
+                                string to1 = p1.email;
+                                string subject1 = "Appointment Scheduled Notice";
+                                string message1 = sendmail.CreateBodyForAppointmentSchedule(p1, doc1, emaildate);
+                                sendmail.sendingEmailWithHtml(to1, subject1, message1);
                                 ViewBag.ClashedAppointments = clashed_appointments;
                                 return View();
                             }
                         }
+
+                        Patient p = await _patientService.getpatient(appointment.patientID);
+                        Doctor doc = await _doctorService.GetByIDAsync(did);
+                        string to = p.email;
+                        string subject = "Appointment Scheduled Notice";
+                        string message = sendmail.CreateBodyForAppointmentSchedule(p, doc, emaildate);
+                        sendmail.sendingEmailWithHtml(to, subject, message);
                         return RedirectToAction(nameof(showAppointment));
                     }
                     else
@@ -243,25 +266,44 @@ namespace physioCard.Controllers
             try
             {
                 int did = (int)HttpContext.Session.GetInt32("docID");
+                ViewBag.data = await _dashBoardController.getProfileAsync(did);
+                List<Appointment> appointments = await _appointmentService.getAllAppointments(did);
+                foreach (var item in appointments)
+                {
+                    item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
+                }
+                ViewBag.appointments = appointments;
                 if (ModelState.IsValid)
                 {
-                    bool status = await _appointmentService.rescheduleAppointment(appointment);
-                    ViewBag.data = await _dashBoardController.getProfileAsync(did);
-                    List<Appointment> appointments = await _appointmentService.getAllAppointments(did);
-                    foreach (var item in appointments)
+                    bool cstatus = await _appointmentService.checkAppointmentClashes(appointment);
+
+                    if (cstatus)
                     {
-                        item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
-                    }
-                    ViewBag.appointments = appointments;
-                    if (status)
-                    {
-                        ViewBag.statusupdate = true;
+                        ViewBag.clashstatus = true;
+                        //ViewBag.statusupdate = false;
                         return View("showAppointment");
                     }
                     else
                     {
-                        ViewBag.statusupdate = false;
-                        return View("showAppointment");
+                        bool status = await _appointmentService.rescheduleAppointment(appointment);
+
+                        Patient p = await _patientService.getpatient(appointment.patientID);
+                        Doctor doc = await _doctorService.GetByIDAsync(did);
+                        string to = p.email;
+                        string subject = "Appointment Rescheduled Notice";
+                        string message = "<h4>Dear " + p.fname + " " + p.lname + "</h4><p>Your appointment has been rescheduled on " + appointment.date_start.ToString("dd-MM-yyyy") + " " + appointment.starttime.ToString("HH:mm") + " for " + appointment.sessiontime.ToString("HH") + " hour and " + appointment.sessiontime.ToString("mm") + " minutes. Kindly contact your physiotherapist if you have any issues regarding it. </p><h5>Thank You</h5>";
+                        sendmail.sendingEmailWithHtml(to, subject, message);
+
+                        if (status)
+                        {
+                            ViewBag.statusupdate = true;
+                            return View("showAppointment");
+                        }
+                        else
+                        {
+                            ViewBag.statusupdate = false;
+                            return View("showAppointment");
+                        }
                     }
                 }
                 else
@@ -286,7 +328,16 @@ namespace physioCard.Controllers
             try
             {
                 int did = (int)HttpContext.Session.GetInt32("docID");
+                Appointment appointment = await _appointmentService.getAppointmentByID(appointmentID);
                 bool status = await _appointmentService.deleteAppointment(appointmentID);
+
+                Patient p = await _patientService.getpatient(appointment.patientID);
+                Doctor doc = await _doctorService.GetByIDAsync(did);
+                string to = p.email;
+                string subject = "Appointment Cancellation Notice";
+                string message = "<h4>Dear " + p.fname + " " + p.lname + "</h4><p>Your appointment that was on " + appointment.date_start.ToString("dd-MM-yyyy") + " " + appointment.starttime.ToString("HH:mm") + " has been cancelled. Kindly contact your physiotherapist if you have any issues regarding it. </p><h5>Thank You</h5>";
+                sendmail.sendingEmailWithHtml(to, subject, message);
+
                 ViewBag.data = await _dashBoardController.getProfileAsync(did);
                 List<Appointment> appointments = await _appointmentService.getAllAppointments(did);
                 foreach (var item in appointments)
@@ -301,7 +352,6 @@ namespace physioCard.Controllers
                 else
                 {
                     ViewBag.statusdelete = false;
-
                 }
                 return View("showAppointment");
             }
@@ -316,7 +366,8 @@ namespace physioCard.Controllers
             }
         }
 
-        public async Task<ActionResult> AppointmentCalendar() {
+        public async Task<ActionResult> AppointmentCalendar()
+        {
             int did = (int)HttpContext.Session.GetInt32("docID");
             ViewBag.data = await _dashBoardController.getProfileAsync(did);
             return View();
@@ -325,7 +376,7 @@ namespace physioCard.Controllers
         public async Task<IActionResult> GetAppointments()
         {
             int did = (int)HttpContext.Session.GetInt32("docID");
-            List<Appointment> appList = await _appointmentService.getAllAppointments(did);
+            List<Appointment> appList = await _appointmentService.getAppointments(did);
             foreach (var item in appList)
             {
                 item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);

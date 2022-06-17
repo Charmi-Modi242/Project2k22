@@ -31,14 +31,16 @@ namespace physioCard.Repositories
             }
         }
 
-        public async Task<List<Clinic>> GetAllAsync()
+        public async Task<List<Clinic>> GetAllAsync(int docID)
         {
             try
             {
-                var query = "select * from clinicTB;";
+                var query = "select * from clinicTB where clinicID NOT IN(select clinicID from doctor_clinicTB where docID=@did);";
+                var param = new DynamicParameters();
+                param.Add("did", docID, DbType.Int32);
                 using (var connection = CreateConnection())
                 {
-                    return (await connection.QueryAsync<Clinic>(query)).ToList();
+                    return (await connection.QueryAsync<Clinic>(query, param)).ToList();
                 }
             }
             catch (Exception ex) {

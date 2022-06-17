@@ -25,5 +25,6 @@ namespace physioCard.Domain
         public String? lname { get; set; }
         public String? name { get; set; }
         public bool? attendance_status { get; set; }
+        public bool? invoice_status { get; set; }
     }
 }

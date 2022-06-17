@@ -14,7 +14,7 @@ namespace physioCard.Services
         {
             return _appointmentRepository.getPatientNameAsync(did);
         }
-        public Task<bool> FixAppointment(Appointment appointment)
+        public Task<string> FixAppointment(Appointment appointment)
         {
             return _appointmentRepository.FixAppointmentAsync(appointment);
         }
@@ -46,21 +46,21 @@ namespace physioCard.Services
         {
             return await _appointmentRepository.getMonthlyAppointment(did, mdate);
         }
-        //public Task<List<Appointment>> getAppointmentsAsync()
-        //{
-        //    return _appointmentRepository.getAppointmentsAsync();
-        //}
-        public async Task<List<revenueModel>> getYearlyRevenue(int did)
+        public Task<List<Appointment>> getAppointments(int did)
         {
-            return await _appointmentRepository.getYearlyRevenue(did);
+            return _appointmentRepository.getAppointmentsAsync(did);
         }
+        //public async Task<List<revenueModel>> getYearlyRevenue(int did)
+        //{
+        //    return await _appointmentRepository.getYearlyRevenue(did);
+        //}
         public async Task<int> getAppointmentCount(int did)
         {
             return await _appointmentRepository.getAppointmentCount(did);
         }
-        public async Task<int> getRevenueCount(int did)
-        {
-            return await _appointmentRepository.getRevenueCount(did);
-        }
+        //public async Task<int> getRevenueCount(int did)
+        //{
+        //    return await _appointmentRepository.getRevenueCount(did);
+        //}
     }
 }

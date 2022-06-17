@@ -32,6 +32,19 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             });
         </script>
     }
+    if (ViewBag.clashstatus == true)
+    {
+        <script>
+            swal({
+                title: "Failed",
+                text: "Appointment Reschedule Failed Due To Timing Clashes With Other Appointment. Reschedule Again.",
+                type: "error",
+                timer: 1500,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+        </script>
+    }
 }
 @{
     if (ViewBag.statusdelete == true)

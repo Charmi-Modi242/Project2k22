@@ -1,0 +1,183 @@
+﻿@using physioCard.Domain
+@model physioCard.Domain.Invoice
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+
+@{
+    if (ViewBag.invoice == false)
+    {
+        <script>
+            swal({
+                title: "Failed",
+                text: "Something Went Wrong. Generate Invoice Again",
+                type: "error",
+                timer: 1500,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+            window.location("/Invoice/generateInvoice");
+        </script>
+    }
+}
+<link rel="stylesheet" href="~/css/formDesign.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/tableSite.css" asp-append-version="true" />
+<div class="container p-3">
+    <div class="search-item">
+        <div class="search-flex">
+            <div class="sitem s2">
+                <div class="headline1">
+                    <h1>Generate Invoices</h1>
+                </div>
+            </div>
+            <div class="sitem s1">
+                <input class="form-control" id="myfilter" type="search" placeholder="Search" aria-label="Search" onkeyup="search()">
+                @*<label class="form-label"><span class="material-icons">search</span></label>*@
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <table class="table table-hover" id="mytable">
+            <thead>
+                <tr>
+                    <th hidden="hidden">ID</th>
+                    <th></th>
+                    <th>Name</th>
+                    <th>E-mail</th>
+                    <th>Contact No</th>
+                    <th>Clinic</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Patient item in ViewBag.patients)
+                {
+                    <tr>
+                        <td hidden="hidden">@item.patientID</td>
+                        <td data-label="Photo" align="center"><a href="~/@item.photo"><img src="~/@item.photo" style="border-radius : 50%; width: 70px; height: 70px;" /></a></td>
+                        <td data-label="Name">@item.fname @item.lname</td>
+                        <td data-label="E-mail">@item.email</td>
+                        <td data-label="Contact No">@item.contactno</td>
+                        <td data-label="Clinic">@item.clinicname</td>
+                        <td data-label="Operations">
+                            <a href="#" class="show" data-bs-toggle="modal" data-bs-target="#showAppointments" data-id="@item.patientID">Appointments</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Model-->
+<div class="modal" id="showAppointments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myheader">SELECT APPOINTMENTS TO MAKE INVOICE....</h4>
+            </div>
+            <form method="post" asp-action="createInvoice">
+                <div class="modal-body">
+                    <span id="checkErr" class="text-danger"></span>
+                    <br />
+                    <table class="table table-hover" id="mymodeltable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablebody">
+                        </tbody>
+                    </table>
+                    <div class="form-group">
+                        <div class="form-outline">
+                            <input type="text" placeholder=" " class="form-control" id="custom" name="discount" value="0.0" />
+                            <label class="form-label">Discount %</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <br />
+                    <input type="submit" value="Create Invoice" class="btn btn-primary createInvoice" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('table .show').on('click', function() {
+            var id = $(this).data("id")
+            document.getElementById('checkErr').textContent = " ";
+            //document.getElementById('nodataErr').textContent = " ";
+            //console.log(id);
+            $.ajax({
+                type: 'POST',
+                url: '/Invoice/getAppointmentbyPatientID/',
+                data: { "patientID": id },
+                success: function(response) {
+                    //console.log(response.length);
+                    //if(response.length > 0)
+                    //{
+                    //document.getElementById('nodataErr').textContent = " ";
+                    const tabledata = response.map(function(value) {
+                        return (
+                            `<tr>
+                                            <td>${value.fname}  ${value.lname}</td>
+                                            <td>${value.date_start.substring(8, 10)}-${value.date_start.substring(5, 7)}-${value.date_start.substring(0, 4)}</td>
+                                            <td>${value.starttime.substring(11)} - ${value.endtime.substring(11)}</td>
+                                            <td><input type="checkbox" class="form-check-input" id="makeInvoice" data-id="${value.appointmentID}" value="${value.appointmentID}" name="appointment_ids"></td>
+                                            <input type="text" value="${value.patientID}" name="patientID" hidden="hidden">
+                                        </tr>`
+                        );
+                    }).join('');
+                    const tablebody = document.querySelector('#tablebody');
+                    tablebody.innerHTML = tabledata;
+                    //}
+                    //else
+                    //{
+                    //    document.getElementById('nodataErr').textContent = "NO DATA TO SHOW";
+                    //    //document.getElementById('myform').style.display = "none";
+                    //    //document.getElementById('myheader').style.display = "none";
+                    //}
+                }
+            })
+            $('.createInvoice').on('click', function() {
+                var checkboxes = document.getElementsByClassName('form-check-input');
+                //console.log(checkboxes);
+                //console.log(checkboxes[0].checked);
+                var j = 0;
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked == true) {
+                        break;
+                    }
+                    else {
+                        j++;
+                    }
+                }
+                if (j == checkboxes.length) {
+                    document.getElementById('checkErr').textContent = "SELECT ATLEAST ONE APPOINTMENT TO MAKE INVOICE";
+                    return false;
+                }
+                else {
+                    document.getElementById('checkErr').textContent = " ";
+                }
+            });
+        });
+
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+    });
+</script>
