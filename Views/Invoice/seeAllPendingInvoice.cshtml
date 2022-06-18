@@ -20,6 +20,7 @@
                     <th>Appointments Included</th>
                     <th>Amount</th>
                     <th>Payment Status</th>
+                    <th>Show Invoice</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,6 +44,7 @@
                                 <input type="checkbox" class="form-check-input payBtn" id="pay" data-id="@item.invoiceID" checked="@item.pay_status">
                             </div>
                         </td>
+                        <td><a asp-controller="Invoice" asp-action="showInvoice" asp-route-ino="@item.invoiceNo">Invoice</a></td>
                     </tr>
                 }
             </tbody>
