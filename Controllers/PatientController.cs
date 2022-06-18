@@ -120,8 +120,6 @@ namespace physioCard.Controllers
                 ViewBag.data = await _dashboardController.getProfileAsync(patient.docid);
                 if (ModelState.IsValid)
                 {
-                    
-
                     if (patient.photo_img == null)
                     {
                         patient.photo = patient.photo;

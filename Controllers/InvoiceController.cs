@@ -39,15 +39,15 @@ namespace physioCard.Controllers
             ViewBag.data = await _dashBoardController.getProfileAsync(did);
             List<Patient> patients = await _patientService.getallpatient(did);
             List<Patient> ipatients = new List<Patient>();
-            foreach(var patient in patients)
+            foreach (var patient in patients)
             {
                 Clinic clinic = await _clinicService.GetByClinicID(patient.clinicid);
                 patient.clinicname = clinic.name;
                 List<Appointment> appointments = await _invoiceService.getAppointmentbyPatientID(patient.patientID);
-                if(appointments.Count > 0)
+                if (appointments.Count > 0)
                 {
                     ipatients.Add(patient);
-                } 
+                }
             }
             ViewBag.patients = ipatients;
             return View();
@@ -64,9 +64,9 @@ namespace physioCard.Controllers
         [HttpPost]
         public async Task<IActionResult> createInvoice(int[] appointment_ids, int patientID, double discount)
         {
-            try 
+            try
             {
-                if(appointment_ids.Count() > 0)
+                if (appointment_ids.Count() > 0)
                 {
                     int did = (int)HttpContext.Session.GetInt32("docID");
                     ViewBag.data = await _dashBoardController.getProfileAsync(did);
@@ -78,7 +78,7 @@ namespace physioCard.Controllers
                     }
                     Invoice invoice = new Invoice();
                     Random random = new Random();
-                    invoice.invoiceNo = DateTime.Now.ToString("yyyyMMdd") + patientID.ToString() + random.Next(00,99).ToString();
+                    invoice.invoiceNo = DateTime.Now.ToString("yyyyMMdd") + patientID.ToString() + random.Next(00, 99).ToString();
                     invoice.patientID = patientID;
                     invoice.doctorID = did;
                     invoice.invoice_date = DateTime.Now;
@@ -115,15 +115,37 @@ namespace physioCard.Controllers
                     }
                 }
                 return RedirectToAction("generateInvoice");
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", "Unable to create invoice. " +
                 "Try Again, and if the problem persists" +
                 "See your system administrator.");
                 return View();
             }
+        }
+
+        public async Task<IActionResult> showInvoice(String ino)
+        {
+            int did = (int)HttpContext.Session.GetInt32("docID");
+            ViewBag.data = await _dashBoardController.getProfileAsync(did);
+            Doctor doctor = await _doctorService.GetByIDAsync(did);
+            Invoice invoice = await _invoiceService.getInvoiceByID(ino);
+            Patient patient = await _patientService.getpatient(invoice.patientID);
+            Clinic clinic = await _clinicService.GetByClinicID(patient.clinicid);
+            List<Appointment> appointments = await _invoiceService.getAppointmentsinInvoice(invoice);
+            foreach (var item in appointments)
+            {
+                item.endtime = item.starttime.Add(item.sessiontime.TimeOfDay);
+            }
+
+            ViewBag.appointments = appointments;
+            ViewBag.invoice = invoice;
+            ViewBag.patient = patient;
+            ViewBag.clinic = clinic;
+            ViewBag.doctor = doctor;
+            return View();
         }
 
         public async Task<IActionResult> yourInvoice(String ino)
@@ -147,7 +169,7 @@ namespace physioCard.Controllers
             AlternateView alternateViewSign = _invoiceService.CreateAlternateViewofSign(body, clinic);
             bool mailStatus = sendmail.sendingEmailWithImage(to, subject, body, alternateViewLogo, alternateViewSign);
 
-            ViewBag.appointments = appointments;    
+            ViewBag.appointments = appointments;
             ViewBag.invoice = invoice;
             ViewBag.patient = patient;
             ViewBag.clinic = clinic;

@@ -62,7 +62,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             <div class="modal-header">
                 <h4>Edit Patient</h4>
             </div>
-            <form method="post" asp-action="editPatient">
+            <form method="post" asp-action="editPatient" enctype="multipart/form-data">
                 <div class="modal-body">
                     <input asp-for="patientID" id="pid" hidden="hidden" />
                     <input asp-for="photo" id="logoLink" hidden="hidden" id="photo" />
@@ -210,6 +210,28 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 else {
                     tr[i].style.display = "none";
                 }
+            }
+        }
+    }
+
+    function chkImg() {
+        var theFile = document.getElementById('formFile');
+        var filePath = theFile.value;
+        var fileExt = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!fileExt.exec(filePath)) {
+            document.getElementById('errImg').innerHTML = "INCLUDE ONLY IMAGE FILE(i.e., .png, .jpg, .jpeg)";
+            document.getElementById('errImg').style.color = "#FF0000";
+            theFile.value = '';
+            return false;
+        }
+        else {
+            if (theFile.files && theFile.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('prevImg').innerHTML = "<br/><img src='" + e.target.result + "' width='150' />";
+                    document.getElementById('showImg').innerHTML = "";
+                };
+                reader.readAsDataURL(theFile.files[0]);
             }
         }
     }

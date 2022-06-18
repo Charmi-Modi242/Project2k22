@@ -14,7 +14,7 @@ namespace physioCard.Repositories
         {
             try
             {
-                string sql = "select DATEPART(MM, istart_date) as monthID, sum(gross_amount) as revenue FROM invoiceTB where doctorID=@did AND istart_date > DATEADD(m, -11, (DATEADD(MM, DATEDIFF(mm, 0, GETDATE()), 0))) AND pay_status = 'True' group by DATEPART(MM, istart_date);";
+                string sql = "select DATEPART(MM, invoice_date) as monthID, sum(gross_amount) as revenue FROM invoiceTB where doctorID=@did AND invoice_date > DATEADD(m, -11, (DATEADD(MM, DATEDIFF(mm, 0, GETDATE()), 0))) AND pay_status = 'True' group by DATEPART(MM, invoice_date);";
                 var param = new DynamicParameters();
                 param.Add("did", did, DbType.Int32);
                 using (var connection = CreateConnection())
@@ -32,7 +32,7 @@ namespace physioCard.Repositories
         {
             try
             {
-                string sql = "select sum(gross_amount) from invoiceTB where datepart(MM, istart_date) = datepart(MM, getDate()) AND doctorID = @id AND pay_status = 'True';";
+                string sql = "select sum(gross_amount) from invoiceTB where datepart(MM, invoice_date) = datepart(MM, getDate()) AND datepart(YYYY, invoice_date) = datepart(YYYY, getDate()) AND doctorID = @id AND pay_status = 'True';";
                 var param = new DynamicParameters();
                 param.Add("id", did, DbType.Int32);
                 using (var connection = CreateConnection())

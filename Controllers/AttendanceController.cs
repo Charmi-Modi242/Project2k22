@@ -14,11 +14,12 @@ namespace physioCard.Controllers
         private readonly IAppointmentService _appointmentService;
         private readonly IPatientService _patientService;
 
-        public AttendanceController(IAttendanceService attendanceService, DashBoardController dashBoardController, IAppointmentService appointmentService)
+        public AttendanceController(IAttendanceService attendanceService, DashBoardController dashBoardController, IAppointmentService appointmentService, IPatientService patientService) 
         {
             _attendanceService = attendanceService;
             _dashBoardController = dashBoardController;
             _appointmentService = appointmentService;
+            _patientService = patientService;
         }
         public IActionResult Index()
         {

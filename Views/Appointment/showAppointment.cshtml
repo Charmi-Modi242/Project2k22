@@ -17,6 +17,8 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 showCancelButton: false,
                 showConfirmButton: false
             });
+
+            window.location.replace("/Appointment/showAppointment");
         </script>
     }
     if (ViewBag.statusupdate == false)
@@ -30,6 +32,8 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 showCancelButton: false,
                 showConfirmButton: false
             });
+
+            window.location.replace("/Appointment/showAppointment");
         </script>
     }
     if (ViewBag.clashstatus == true)
@@ -43,6 +47,8 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 showCancelButton: false,
                 showConfirmButton: false
             });
+
+            window.location.replace("/Appointment/showAppointment");
         </script>
     }
 }
@@ -144,7 +150,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
                     <div class="form-group">
                         <div class="form-outline">
-                            <input type="date" class="form-control custom3" id="date" asp-for="date_start">
+                            <input type="date" class="form-control custom3" id="date" asp-for="date_start" min="@DateTime.Today.ToString("yyyy-MM-dd")">
                             <label class="form-label">Date</label>
                         </div>
                     </div>
